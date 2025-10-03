@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metin Değiştirme</title>
+    <style>
+        #header, #content, #name {
+            color: black; 
+        }
+
+        #changeButton {
+            position: relative; 
+            transition: transform 0.3s; 
+        }
+    </style>
+</head>
+<body>
+
+    <h1 id="header">Başlık</h1>
+    <p id="content">Bu içerik paragrafıdır.</p>
+    <p id="name">Ad Soyad: John Doe</p>
+
+    <input type="text" id="newHeader" placeholder="Yeni Başlık">
+    <input type="text" id="newContent" placeholder="Yeni İçerik">
+    <input type="text" id="newName" placeholder="Yeni Ad Soyad">
+    
+    <button id="changeButton" onmouseover="hareketEt()" onclick="değiştir()">Değiştir</button>
+
+    <script>
+        function değiştir() {
+           
+            var newHeader = document.getElementById("newHeader").value;
+            var newContent = document.getElementById("newContent").value;
+            var newName = document.getElementById("newName").value;
+
+           
+            if (newHeader) {
+                document.getElementById("header").innerText = newHeader;
+            }
+            if (newContent) {
+                document.getElementById("content").innerText = newContent;
+            }
+            if (newName) {
+                document.getElementById("name").innerText = "Ad Soyad: " + newName;
+            }
+
+           
+            document.getElementById("header").style.color = "blue"; // Yeni renk
+            document.getElementById("content").style.color = "blue"; // Yeni renk
+            document.getElementById("name").style.color = "blue"; // Yeni renk
+
+           
+            alert("Metinler değiştirildi ve renkleri değiştirildi!");
+        }
+
+        function hareketEt() {
+            const button = document.getElementById("changeButton");
+            const randomX = Math.floor(Math.random() * 200) - 100; // -100 ile 100 arasında rastgele bir sayı
+            const randomY = Math.floor(Math.random() * 200) - 100; // -100 ile 100 arasında rastgele bir sayı
+
+          
+            const rect = button.getBoundingClientRect();
+            const newX = rect.left + randomX;
+            const newY = rect.top + randomY;
+
+       
+            button.style.position = 'absolute'; // Konumu mutlak yap
+            button.style.left = newX + 'px';
+            button.style.top = newY + 'px';
+        }
+    </script>
+
+</body>
+</html>

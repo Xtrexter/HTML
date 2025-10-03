@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sayı Kontrolü</title>
+</head>
+<body>
+
+<div>
+    <input type="number" id="sayi" placeholder="Bir sayı girin">
+    <input type="button" onclick="kontrolEt()" value="Kontrol Et">
+</div>
+
+<script>
+    function kontrolEt() {
+        let sayi = parseFloat(document.getElementById("sayi").value);
+        alert(sayi > 0 ? "Girdiğiniz sayı pozitif." : sayi < 0 ? "Girdiğiniz sayı negatif." : "Girdiğiniz sayı 0.");
+    }
+</script>
+
+</body>
+</html>

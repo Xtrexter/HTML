@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bonanza Hayvanlar - Sweet Bonanza Tarzı Oyun</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Poppins:wght@300;500&display=swap');
+
+  /* Reset and global */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f0c27b, #4b1248);
+    color: white;
+    user-select: none;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Intro style */
+  #intro {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(45deg, #FDB813, #D93F3F);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeOut 1s ease forwards;
+    animation-delay: 2s;
+  }
+  #intro h1 {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 8rem;
+    color: #fff;
+    text-shadow:
+      4px 4px 8px rgba(0,0,0,0.5),
+      0 0 30px #FFF700,
+      0 0 45px #FF8C00,
+      0 0 60px #FF4500,
+      0 0 75px #FF0000;
+    animation: glow 1.5s ease-in-out infinite alternate;
+    user-select:none;
+  }
+  @keyframes glow {
+    0% {
+      text-shadow:
+        4px 4px 8px rgba(0,0,0,0.5),
+        0 0 30px #FFF700,
+        0 0 45px #FF8C00,
+        0 0 60px #FF4500,
+        0 0 75px #FF0000;
+    }
+    100% {
+      text-shadow:
+        6px 6px 12px rgba(0,0,0,0.7),
+        0 0 60px #FFD700,
+        0 0 90px #FFA500,
+        0 0 120px #FF6347,
+        0 0 150px #FF2400;
+    }
+  }
+  @keyframes fadeOut {
+    to {
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+    }
+  }
+
+  /* Auth Screen */
+  #auth-screen {
+    display: none;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #411E5A, #251B37);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    gap: 1.5rem;
+    animation: fadeIn 1s ease forwards;
+  }
+  #auth-screen.active {
+    display: flex;
+  }
+  #auth-screen h2 {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 3rem;
+    margin-bottom: 0.8rem;
+    color: #FF8C00;
+    text-shadow: 1px 1px 6px #ffb347;
+    user-select:none;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    width: 280px;
+  }
+  input[type="text"], input[type="password"] {
+    padding: 0.8rem 1.2rem;
+    border-radius: 30px;
+    border: none;
+    font-size: 1.1rem;
+    outline: none;
+    background: #44275e;
+    color: #fff;
+    box-shadow: inset 0 0 8px #ff8c00;
+    transition: background 0.3s;
+  }
+  input[type="text"]:focus, input[type="password"]:focus {
+    background: #5a348f;
+    box-shadow: 0 0 14px #ffb347;
+  }
+  button {
+    margin-top: 1rem;
+    background: #ff6f00;
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    padding: 0.85rem 2rem;
+    font-size: 1.3rem;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 0 14px #ff8c00;
+    font-family: 'Poppins', sans-serif;
+    transition: background 0.3s ease;
+    user-select:none;
+  }
+  button:hover, button:focus {
+    background: #ffa726;
+    box-shadow: 0 0 30px #ffd54f;
+  }
+  .switch-auth {
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: #ffb347;
+    cursor: pointer;
+    user-select: none;
+    text-align: center;
+    transition: color 0.3s;
+  }
+  .switch-auth:hover, .switch-auth:focus {
+    color: #fff3b0;
+    text-decoration: underline;
+    outline: none;
+  }
+  #auth-message {
+    color: #ffb3b3;
+    font-weight: 600;
+    font-size: 1rem;
+    min-height: 1.4rem;
+    user-select:none;
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+  <!-- Intro -->
+  <div id="intro" role="alert" aria-live="assertive" aria-atomic="true">
+    <h1>GARİP</h1>
+  </div>
+
+  <!-- Authentication Screen -->
+  <section id="auth-screen" aria-label="Hesap oluştur veya giriş yap">
+    <h2 id="auth-title">Hesap Oluştur</h2>
+    <form id="auth-form" autocomplete="off" novalidate>
+      <div class="form-group">
+        <input type="text" id="username" placeholder="Kullanıcı Adı" minlength="3" maxlength="15" autocomplete="off" required aria-label="Kullanıcı Adı" />
+      </div>
+      <div class="form-group">
+        <input type="password" id="password" placeholder="Şifre" minlength="4" maxlength="20" autocomplete="off" required aria-label="Şifre" />
+      </div>
+      <button type="submit" id="auth-submit-btn" aria-live="polite">Kaydol</button>
+    </form>
+    <div id="auth-message" role="alert" aria-live="assertive" style="height:1.4rem;margin-top:2px;text-align:center;"></div>
+    <div id="switch-auth" class="switch-auth" tabindex="0" role="button" aria-pressed="false" aria-label="Giriş ve Kayıt arasında geçiş yap">Zaten hesabınız var mı? Giriş Yap</div>
+  </section>
+
+<script>
+  (function(){
+    // ==== Variables & Constants
+    const animals = ['🐶', '🐱', '🐰', '🦊', '🐻', '🐼', '🐸'];
+    const ROWS = 7;
+    const COLS = 7;
+
+    // DOM elements
+    const introEl = document.getElementById('intro');
+    const authScreen = document.getElementById('auth-screen');
+    const authForm = document.getElementById('auth-form');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const authTitle = document.getElementById('auth-title');
+    const authSubmitBtn = document.getElementById('auth-submit-btn');
+    const switchAuthBtn = document.getElementById('switch-auth');
+    const authMessage = document.getElementById('auth-message');
+
+    const STORAGE_KEY = 'bonanzaHayvanUsers';
+    let usersDB = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    let loggedInUser  = null;
+    let isLoginMode = false;
+
+    // ==== Utility Functions
+    function saveUsersDB(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(usersDB));
+    }
+    function setAuthMessage(msg, isError=true){
+      authMessage.textContent = msg;
+      authMessage.style.color = isError ? '#ff6b6b' : '#b4f8c8';
+    }
+    function clearAuthMessage(){
+      authMessage.textContent = '';
+    }
+
+    // ==== Intro sequence
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        introEl.style.display = 'none';
+        authScreen.classList.add('active');
+        usernameInput.focus();
+      }, 2000);
+    });
+
+    // ==== Toggle login/signup UI
+    function toggleAuthMode(){
+      clearAuthMessage();
+      isLoginMode = !isLoginMode;
+      if(isLoginMode){
+        authTitle.textContent = 'Hesaba Giriş Yap';
+        authSubmitBtn.textContent = 'Giriş Yap';
+        switchAuthBtn.textContent = 'Hesabınız yok mu? Kayıt Ol';
+      } else {
+        authTitle.textContent = 'Hesap Oluştur';
+        authSubmitBtn.textContent = 'Kaydol';
+        switchAuthBtn.textContent = 'Zaten hesabınız var mı? Giriş Yap';
+      }
+      authForm.reset();
+      usernameInput.focus();
+    }
+    switchAuthBtn.addEventListener('click', toggleAuthMode);
+    switchAuthBtn.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        toggleAuthMode();
+      }
+    });
+
+    // ==== Authentication form submission
+    authForm.addEventListener('submit', e=>{
+      e.preventDefault();
+      clearAuthMessage();
+
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value;
+
+      if(username.length < 3){
+        setAuthMessage('Kullanıcı adı en az 3 karakter olmalıdır.');
+        usernameInput.focus();
+        return;
+      }
+      if(password.length < 4){
+        setAuthMessage('Şifre en az 4 karakter olmalıdır.');
+        passwordInput.focus();
+        return;
+      }
+
+      if(!isLoginMode){
+        // Signup: case-insensitive check
+        const exists = Object.keys(usersDB).some(u => u.toLowerCase() === username.toLowerCase());
+        if(exists){
+          setAuthMessage('Bu kullanıcı adı zaten mevcut.');
+          usernameInput.focus();
+          return;
+        }
+        usersDB[username] = password;
+        saveUsersDB();
+        loggedInUser  = username;
+        afterLogin();
+      } else {
+        // Login
+        const foundUser  = Object.keys(usersDB).find(u => u.toLowerCase() === username.toLowerCase());
+        if(!foundUser  || usersDB[foundUser ] !== password){
+          setAuthMessage('Geçersiz kullanıcı adı veya şifre.');
+          usernameInput.focus();
+          return;
+        }
+        loggedInUser  = foundUser ;
+        afterLogin();
+      }
+    });
+
+    // ==== After login/signup - show welcome then game
+    function afterLogin(){
+      authScreen.classList.remove('active');
+      authMessage.textContent = `Hoşgeldiniz, ${loggedInUser }!`;
+      setTimeout(() => {
+        authMessage.textContent = '';
+        // Burada oyunu başlatma kodu eklenebilir
+      }, 2000);
+    }
+  })();
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,46 @@
+body {
+
+    background-color: #a8dadc; 
+
+    color: white; 
+
+    font-family: Arial, sans-serif; 
+
+    text-align: center; 
+
+    padding: 20px; 
+
+}
+
+
+@media screen and (min-width: 600px) {
+
+    body {
+
+        background-color: #e76f51; 
+
+    }
+
+}
+
+
+@media screen and (min-width: 800px) {
+
+    body {
+
+        background-color: #457b9d; 
+
+    }
+
+}
+
+
+@media screen and (min-width: 1200px) {
+
+    body {
+
+        background-color: #e9c46a; 
+
+    }
+
+}

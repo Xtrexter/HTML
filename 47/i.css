@@ -1,0 +1,46 @@
+div {
+
+    text-align: center; 
+
+}
+
+
+#kucukReklam {
+
+    display: none; 
+
+}
+
+
+@media screen and (min-device-width: 215px) {
+
+    #kucukReklam {
+
+        display: inline; 
+
+    }
+
+    #buyukReklam {
+
+        display: none; 
+
+    }
+
+}
+
+
+@media screen and (min-device-width: 750px) {
+
+    #buyukReklam {
+
+        display: inline; 
+
+    }
+
+    #kucukReklam {
+
+        display: none; 
+
+    }
+
+}

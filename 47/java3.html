@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metin Değiştirme</title>
+    <style>
+        #header, #content, #name {
+            color: black; 
+        }
+    </style>
+</head>
+<body>
+
+    <h1 id="header">Başlık</h1>
+    <p id="content">Bu içerik paragrafıdır.</p>
+    <p id="name">Ad Soyad:maholi</p>
+
+    <input type="text" id="newHeader" placeholder="Yeni Başlık">
+    <input type="text" id="newContent" placeholder="Yeni İçerik">
+    <input type="text" id="newName" placeholder="Yeni Ad Soyad">
+    
+    <button onclick="değiştir()">Değiştir</button>
+
+    <script>
+        function değiştir() {
+            
+            var newHeader = document.getElementById("newHeader").value;
+            var newContent = document.getElementById("newContent").value;
+            var newName = document.getElementById("newName").value;
+
+            
+            if (newHeader) {
+                document.getElementById("header").innerText = newHeader;
+            }
+            if (newContent) {
+                document.getElementById("content").innerText = newContent;
+            }
+            if (newName) {
+                document.getElementById("name").innerText = "Ad Soyad: " + newName;
+            }
+
+           
+            document.getElementById("header").style.color = "blue"; 
+            document.getElementById("content").style.color = "red"; 
+            document.getElementById("name").style.color = "green"; 
+
+           
+            alert("Metinler değiştirildi ve renkleri değiştirildi!");
+        }
+    </script>
+
+</body>
+</html>

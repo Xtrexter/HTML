@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palindrom Kontrolü</title>
+</head>
+<body>
+
+<div>
+    <input type="text" id="kelime" placeholder="Bir kelime girin">
+    <input type="button" onclick="kontrolEt()" value="Kontrol Et">
+</div>
+
+<script>
+    function kontrolEt() {
+      
+        let kelime = document.getElementById("kelime").value;
+        let terstenKelime = kelime.split('').reverse().join('');
+        if (kelime === terstenKelime) {
+            alert("Girdiğiniz kelime palindromdur.");
+        } else {
+            alert("Girdiğiniz kelime palindrom değildir.");
+        }
+    }
+</script>
+
+</body>
+</html>

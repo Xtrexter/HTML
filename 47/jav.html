@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buton Örneği</title>
+    <style>
+        body {
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <button id="messageButton">Mesaj Gönder</button>
+    <button id="colorButton">Renk Değiştir</button>
+
+    <script>
+       
+        document.getElementById('messageButton').addEventListener('click', function() {
+            if (confirm("Tamam butonuna basarsanız yeni bir sayfa açılacak.")) {
+               
+            }
+        });
+
+        
+        document.getElementById('colorButton').addEventListener('click', function() {
+          
+            const randomColor = 'rgb(' + Math.floor(Math.random() * 256) + ',' + 
+                                Math.floor(Math.random() * 256) + ',' + 
+                                Math.floor(Math.random() * 256) + ')';
+           
+            document.body.style.backgroundColor = randomColor;
+        });
+    </script>
+
+</body>
+</html>

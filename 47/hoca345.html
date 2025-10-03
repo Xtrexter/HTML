@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Trader Hasan Uyan Panel</title>
+  <style>
+    body {
+      background: #0f0f0f;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #1a1a1a;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 10px #00ffcc;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2em;
+      color: #00ffcc;
+      text-transform: uppercase;
+    }
+
+    .dashboard {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px;
+    }
+
+    .card {
+      background: #1c1c1c;
+      padding: 20px;
+      margin: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+      width: 90%;
+      max-width: 600px;
+      text-align: left;
+    }
+
+    .price {
+      font-size: 2em;
+      color: #00ffcc;
+    }
+
+    .coin {
+      font-size: 1.3em;
+      margin-bottom: 10px;
+    }
+
+    .tagline {
+      font-size: 1em;
+      color: #ccc;
+    }
+
+    .update-time {
+      font-size: 0.9em;
+      color: #777;
+      margin-top: 5px;
+    }
+
+    .legend {
+      text-align: center;
+      font-size: 1.1em;
+      margin-top: 5px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>HASAN UYAN</h1>
+    <div class="legend">Legendary Crypto Trader 👑</div>
+  </header>
+
+  <div class="dashboard">
+    <div class="card">
+      <div class="coin">Bitcoin (BTC)</div>
+      <div class="price" id="btcPrice">Yükleniyor...</div>
+    </div>
+
+    <div class="card">
+      <div class="coin">Ethereum (ETH)</div>
+      <div class="price" id="ethPrice">Yükleniyor...</div>
+    </div>
+
+    <div class="card">
+      <div class="coin">Portföy</div>
+      <div class="tagline">BTC: 1.2 | ETH: 15.7 | USDT: 5000</div>
+    </div>
+
+    <div class="update-time" id="updateTime">Veriler getiriliyor...</div>
+  </div>
+
+  <script>
+    async function fetchPrices() {
+      const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd');
+      const data = await res.json();
+
+      document.getElementById("btcPrice").textContent = `$${data.bitcoin.usd.toLocaleString()}`;
+      document.getElementById("ethPrice").textContent = `$${data.ethereum.usd.toLocaleString()}`;
+
+      const now = new Date();
+      document.getElementById("updateTime").textContent = `Güncellendi: ${now.toLocaleTimeString()}`;
+    }
+
+    fetchPrices();
+    setInterval(fetchPrices, 10000);
+  </script>
+
+</body>
+</html>
+

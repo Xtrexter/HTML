@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trader Garip - Profesyonel Kripto Trading Paneli</title>
+  <script src="https://s3.tradingview.com/tv.js"></script>
+  <style>
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #eee;
+    }
+    body {
+      background-color: #0b0b1e;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a {
+      color: #00ffcc;
+      text-decoration: none;
+    }
+    header {
+      height: 60px;
+      background: #0f0f2a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #00ffcc;
+      box-shadow: 0 0 15px #00ffcc55;
+    }
+    header .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    header .logo span {
+      font-weight: 900;
+      font-size: 1.8rem;
+      letter-spacing: 3px;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 8px #00ffcc, 0 0 20px #00ffcc, 0 0 30px #00ffcc;
+      }
+      to {
+        text-shadow: 0 0 20px #00ffcc, 0 0 40px #00ffcc, 0 0 60px #00ffcc;
+      }
+    }
+    header nav {
+      display: flex;
+      gap: 25px;
+      font-size: 1rem;
+      color: #999;
+      cursor: pointer;
+    }
+    header nav div:hover {
+      color: #00ffcc;
+    }
+    main {
+      flex: 1;
+      display: flex;
+      height: calc(100vh - 60px);
+    }
+    .side-menu {
+      width: 260px;
+      background-color: #121227;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      box-shadow: 2px 0 15px #00ffcc33;
+      overflow-y: auto;
+    }
+    .side-menu h2 {
+      font-size: 1.2rem;
+      color: #00ffcc;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #00ffcc44;
+      padding-bottom: 8px;
+      user-select: none;
+    }
+    .coin-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .coin-list button {
+      background: none;
+      border: none;
+      color: #ccc;
+      font-size: 1.1rem;
+      padding: 10px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: left;
+      transition: background-color 0.3s, color 0.3s;
+      user-select: none;
+    }
+    .coin-list button.active,
+    .coin-list button:hover {
+      background-color: #00ffcc;
+      color: #000;
+      font-weight: 700;
+    }
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      padding: 30px 40px;
+      gap: 20px;
+      overflow: hidden;
+    }
+    .chart-area {
+      flex: 1;
+      background-color: #1e1e38;
+      border-radius: 14px;
+      box-shadow: 0 0 20px #00ffcc55;
+      overflow: hidden;
+      min-width: 350px;
+      min-height: 480px;
+    }
+    .trade-panel {
+      background-color: #1e1e38;
+      border-radius: 14px;
+      padding: 20px 25px;
+      width: 380px;
+      box-shadow: 0 0 20px #00ffcc55;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      user-select: none;
+      margin-left: 20px;
+      min-height: 480px;
+      flex-shrink: 0;
+    }
+    .trade-panel h3 {
+      color: #00ffcc;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    .trade-panel label {
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: block;
+      color: #bbb;
+    }
+    .trade-panel select,
+    .trade-panel input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: none;
+      background-color: #121227;
+      color: #eee;
+      font-size: 1rem;
+    }
+    .trade-panel input::placeholder {
+      color: #777;
+    }
+    .trade-panel button {
+      margin-top: 15px;
+      background-color: #00ffcc;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 0;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #000;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .trade-panel button:hover {
+      background-color: #00cc99;
+    }
+    .balance-portfolio {
+      margin-top: 20px;
+      background-color: #121227;
+      border-radius: 14px;
+      padding: 15px 20px;
+      color: #ccc;
+      font-size: 0.95rem;
+      user-select: none;
+      overflow-y: auto;
+      max-height: 230px;
+    }
+    .balance-portfolio h4 {
+      color: #00ffcc;
+      margin-bottom: 10px;
+    }
+    .balance-portfolio p {
+      margin-bottom: 6px;
+    }
+    footer {
+      text-align: center;
+      background-color: #0f0f2a;
+      padding: 15px 10px;
+      color: #666;
+      font-size: 0.9rem;
+      user-select: none;
+      border-top: 1px solid #00ffcc33;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    footer strong {
+      color: #00ffcc;
+    }
+    @media(max-width: 1000px) {
+      main {
+        flex-direction: column;
+        height: auto;
+      }
+      .side-menu {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 10px 10px;
+      }
+      .side-menu h2 {
+        display: none;
+      }
+      .coin-list {
+        flex-direction: row;
+        gap: 10px;
+      }
+      .trade-panel {
+        width: 100%;
+        margin-left: 0;
+        min-height: auto;
+      }
+      .content {
+        flex-direction: column;
+        padding: 20px 10px;
+      }
+      .chart-area {
+        min-height: 300px;
+      }
+      .balance-portfolio {
+        max-height: 150px;
+      }
+      footer {
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo"><span>Trader Garip</span></div>
+    <nav>
+      <div>Ana Sayfa</div>
+      <div>Hakkında</div>
+      <div>İletişim</div>
+    </nav>
+  </header>
+
+  <main>
+    <aside class="side-menu">
+      <h2>Coinler</h2>
+      <div class="coin-list">
+        <button class="active" data-symbol="BINANCE:BTCUSDT" data-short="BTC">Bitcoin (BTC)</button>
+        <button data-symbol="BINANCE:ETHUSDT" data-short="ETH">Ethereum (ETH)</button>
+        <button data-symbol="BINANCE:BNBUSDT" data-short="BNB">Binance Coin (BNB)</button>
+        <button data-symbol="BINANCE:SOLUSDT" data-short="SOL">Solana (SOL)</button>
+        <button data-symbol="BINANCE:ADAUSDT" data-short="ADA">Cardano (ADA)</button>
+        <button data-symbol="BINANCE:XRPUSDT" data-short="XRP">Ripple (XRP)</button>
+        <button data-symbol="BINANCE:DOGEUSDT" data-short="DOGE">Dogecoin (DOGE)</button>
+        <button data-symbol="BINANCE:DOTUSDT" data-short="DOT">Polkadot (DOT)</button>
+        <button data-symbol="BINANCE:LTCUSDT" data-short="LTC">Litecoin (LTC)</button>
+        <button data-symbol="BINANCE:LINKUSDT" data-short="LINK">Chainlink (LINK)</button>
+        <button data-symbol="BINANCE:BCHUSDT" data-short="BCH">Bitcoin Cash (BCH)</button>
+        <button data-symbol="BINANCE:MATICUSDT" data-short="MATIC">Polygon (MATIC)</button>
+        <button data-symbol="BINANCE:AVAXUSDT" data-short="AVAX">Avalanche (AVAX)</button>
+        <button data-symbol="BINANCE:AKSOYUSDT" data-short="AKSOY">Aksoy Coin (AKSOY)</button>
+        <button data-symbol="BINANCE:SHIBUSDT" data-short="SHIB">Shiba Inu (SHIB)</button>
+        <button data-symbol="BINANCE:AKTASUSDT" data-short="AKTAS">Aktaş Coin (AKTAS)</button>
+      </div>
+    </aside>
+
+    <section class="content" style="display:flex; flex-wrap: nowrap;">
+      <div class="chart-area" id="chartContainer"></div>
+
+      <div class="trade-panel">
+        <h3>Al/Sat Paneli</h3>
+        <label for="tradeType">İşlem Tipi</label>
+        <select id="tradeType">
+          <option value="buy">Al</option>
+          <option value="sell">Sat</option>
+        </select>
+
+        <label for="tradeAmount">Miktar (Coin)</label>
+        <input type="number" id="tradeAmount" placeholder="Miktar girin" min="0" step="any" />
+
+        <button id="executeTrade">İşlemi Gerçekleştir</button>
+
+        <div class="balance-portfolio">
+          <h4>Bakiye ve Portföy</h4>
+          <p>USDT: <span id="balanceUSDT">10000.00</span></p>
+          <div id="portfolioBalances"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div><strong>CEO:</strong> Trader Garip</div>
+    <div><strong>Müdür:</strong> Aras Aktaş</div>
+    <div><strong>Aksoy Coin Yetkilisi:</strong> Tunahan adnan aksoy</div>
+    <div><strong>Aktaş Coin Yetkilisi:</strong> Aras Aktaş</div>
+  </footer>
+
+  <script>
+    const coinButtons = document.querySelectorAll('.coin-list button');
+    const chartContainer = document.getElementById('chartContainer');
+    const tradeTypeElem = document.getElementById('tradeType');
+    const tradeAmountElem = document.getElementById('tradeAmount');
+    const executeTradeBtn = document.getElementById('executeTrade');
+    const balanceUSDT = document.getElementById('balanceUSDT');
+    const portfolioBalances = document.getElementById('portfolioBalances');
+
+  
+    const portfolio = {
+      USDT: 10000,
+      BTC: 0,
+      ETH: 0,
+      BNB: 0,
+      SOL: 0,
+      ADA: 0,
+      XRP: 0,
+      DOGE: 0,
+      DOT: 0,
+      LTC: 0,
+      LINK: 0,
+      BCH: 0,
+      MATIC: 0,
+      AVAX: 0,
+      AKSOY: 0,
+      SHIB: 0,
+      AKTAS: 0,
+    };
+
+  
+    const coinPrices = {
+      BTC: 30000,
+      ETH: 1900,
+      BNB: 270,
+      SOL: 24,
+      ADA: 0.40,
+      XRP: 0.55,
+      DOGE: 0.07,
+      DOT: 6,
+      LTC: 80,
+      LINK: 7,
+      BCH: 220,
+      MATIC: 1.3,
+      AVAX: 18,
+      AKSOY: 0.12,
+      SHIB: 0.000009,
+      AKTAS: 0.000012,
+    };
+
+    let selectedSymbol = "BINANCE:BTCUSDT";
+    let selectedShort = "BTC";
+    let tvWidget = null;
+
+    
+    function initTradingView(symbol, short) {
+      if (tvWidget) {
+        tvWidget.remove();
+        tvWidget = null;
+      }
+      chartContainer.innerHTML = '';
+
+    
+      let widgetSymbol = symbol;
+      if(short === 'AKSOY' || short === 'AKTAS') {
+        widgetSymbol = 'BINANCE:SHIBUSDT';
+      }
+
+      tvWidget = new TradingView.widget({
+        autosize: true,
+        symbol: widgetSymbol,
+        interval: '15',
+        timezone: 'Etc/UTC',
+        theme: 'dark',
+        style: '1',
+        locale: 'tr',
+        container_id: 'chartContainer',
+      });
+    }
+
+   
+    function switchActiveButton(button) {
+      coinButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+    }
+
+    
+    function updateBalances() {
+      balanceUSDT.textContent = portfolio.USDT.toFixed(2);
+
+      portfolioBalances.innerHTML = '';
+      for (const coin in portfolio) {
+        if (coin !== 'USDT' && portfolio[coin] > 0) {
+          portfolioBalances.innerHTML += `<p>${coin}: ${portfolio[coin].toFixed(6)}</p>`;
+        }
+      }
+    }
+
+    // Coin butonlarına tıklama eventi
+    coinButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        selectedSymbol = button.dataset.symbol;
+        selectedShort = button.dataset.short;
+        switchActiveButton(button);
+        initTradingView(selectedSymbol, selectedShort);
+      });
+    });
+
+    // İşlem butonu tıklama
+    executeTradeBtn.addEventListener('click', () => {
+      const amount = parseFloat(tradeAmountElem.value);
+      if (isNaN(amount) || amount <= 0) {
+        alert('Lütfen geçerli bir miktar girin!');
+        return;
+      }
+
+      const price = coinPrices[selectedShort];
+      if (!price) {
+        alert('Bu coin için fiyat bilgisi bulunamadı!');
+        return;
+      }
+
+      const type = tradeTypeElem.value;
+
+      if (type === 'buy') {
+        const cost = amount * price;
+        if (portfolio.USDT < cost) {
+          alert('Yeterli USDT bakiyeniz yok!');
+          return;
+        }
+        portfolio.USDT -= cost;
+        portfolio[selectedShort] += amount;
+        alert(`${amount} ${selectedShort} alındı.`);
+      } else if (type === 'sell') {
+        if (portfolio[selectedShort] < amount) {
+          alert(`Yeterli ${selectedShort} bakiyeniz yok!`);
+          return;
+        }
+        portfolio[selectedShort] -= amount;
+        portfolio.USDT += amount * price;
+        alert(`${amount} ${selectedShort} satıldı.`);
+      }
+
+      updateBalances();
+      tradeAmountElem.value = '';
+    });
+
+    // Sayfa yüklenirken ilk grafiği ve bakiye güncelle
+    window.onload = () => {
+      initTradingView(selectedSymbol, selectedShort);
+      updateBalances();
+    };
+  </script>
+</body>
+</html>

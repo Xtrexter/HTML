@@ -1,0 +1,441 @@
+<!D<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hayvan Bonanza - Güçlendirilmiş</title>
+<style>
+  /* RESET */
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+  html, body {
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #2e026d, #15162c);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    user-select: none;
+  }
+  header {
+    margin: 25px 0 15px;
+    font-size: 3rem;
+    font-weight: 900;
+    color: #ff6f00;
+    text-shadow:
+      0 0 8px #ff6f00aa,
+      0 0 15px #ff6f00cc;
+    letter-spacing: 3px;
+    text-align: center;
+  }
+  #game {
+    position: relative;
+    width: 360px;
+    height: 300px;
+    background: #1f1b3d;
+    border-radius: 25px;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 8px;
+    box-shadow:
+      inset 0 0 30px #ff6f0044,
+      0 8px 20px #ff6f0055;
+  }
+  .cell {
+    background: linear-gradient(145deg, #3a2c6d, #231a4a);
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.8rem;
+    cursor: default;
+    user-select: none;
+    box-shadow:
+      4px 4px 6px #1f1a3a,
+      -4px -4px 6px #574d94;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    position: relative;
+  }
+  .cell.highlight {
+    box-shadow:
+      0 0 18px 5px #ff6f00cc,
+      inset 0 0 10px #ff6f00cc;
+    transform: scale(1.3);
+    z-index: 2;
+  }
+  /* Animasyonlar */
+  @keyframes dropAnim {
+    0% {transform: translateY(-100%) scale(0.8); opacity: 0;}
+    100% {transform: translateY(0) scale(1); opacity: 1;}
+  }
+  .cell.drop {
+    animation: dropAnim 0.4s ease forwards;
+  }
+  /* Footer */
+  footer {
+    margin-top: 20px;
+    width: 360px;
+    background: #271f55;
+    border-radius: 25px;
+    padding: 20px 25px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow:
+      0 8px 25px #ff6f0077;
+  }
+  .status {
+    flex-grow: 1;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #ffb300;
+    text-shadow:
+      0 0 8px #ffb300aa;
+  }
+  .controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  button, select {
+    cursor: pointer;
+    border-radius: 12px;
+    border: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 10px 18px;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 5px 10px #ff6f00cc;
+    user-select: none;
+    color: #1b1b1b;
+    background: #ff6f00;
+  }
+  button:hover:not(:disabled), select:hover {
+    background: #ff9100;
+    box-shadow: 0 8px 18px #ff910099;
+  }
+  button:disabled {
+    background: #555;
+    box-shadow: none;
+    cursor: not-allowed;
+    color: #bbb;
+  }
+  #betControls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #3e2d81;
+    padding: 10px 15px;
+    border-radius: 15px;
+    color: #ffb300;
+    box-shadow: inset 0 0 15px #ffb300bb;
+  }
+  #betValue {
+    min-width: 60px;
+    text-align: center;
+  }
+  #autoSpinBtn {
+    background: #4caf50;
+    color: #fff;
+    box-shadow: 0 5px 10px #4caf5099;
+  }
+  #autoSpinBtn.active {
+    background: #81c784;
+    box-shadow: 0 8px 18px #81c784cc;
+  }
+  #adBtn {
+    background: #2196f3;
+    color: #fff;
+    box-shadow: 0 5px 10px #2196f399;
+  }
+  #adBtn.loading {
+    background: #1565c0;
+    cursor: wait;
+    box-shadow: none;
+  }
+  /* Win popup */
+  #winPopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: #ff6f00;
+    color: #1b1b1b;
+    padding: 25px 45px;
+    border-radius: 40px;
+    font-size: 2.2rem;
+    font-weight: 900;
+    text-shadow: 0 0 10px #ff9100cc;
+    box-shadow: 0 0 25px #ff6f00cc;
+    user-select: none;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    z-index: 999;
+  }
+  #winPopup.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    pointer-events: auto;
+    animation: popWin 1.4s ease forwards;
+  }
+  @keyframes popWin {
+    0% {transform: translate(-50%, -50%) scale(0.8);}
+    50% {transform: translate(-50%, -50%) scale(1.1);}
+    100% {transform: translate(-50%, -50%) scale(1);}
+  }
+
+  /* Responsive */
+  @media (max-width: 420px) {
+    #game, footer {
+      width: 100vw;
+      border-radius: 0;
+      padding: 8px;
+      box-shadow: none;
+    }
+    footer {
+      flex-direction: column;
+      gap: 12px;
+    }
+    .controls {
+      justify-content: center;
+    }
+  }
+</style>
+</head>
+<body>
+<header id="title">Hayvan Bonanza</header>
+
+<div id="game" aria-label="Oyun Alanı"></div>
+
+<footer>
+  <div class="status" id="balanceStatus" aria-live="polite">Bakiye: 1000 ₺</div>
+
+  <div class="controls">
+    <div id="betControls" aria-label="Bahis Kontrolleri">
+      <button id="betMinus" aria-label="Bahis azalt">−</button>
+      <div id="betValue" aria-live="polite">10 ₺</div>
+      <button id="betPlus" aria-label="Bahis artır">+</button>
+    </div>
+    <button id="spinBtn" aria-label="Oyna butonu">Oyna</button>
+    <button id="autoSpinBtn" aria-label="Otomatik oynat">Otomatik</button>
+    <button id="adBtn" aria-label="Reklam izleyerek bakiye kazan">Reklam İzle +20 ₺</button>
+    <select id="langSelect" aria-label="Dil seçimi" title="Dil seçimi">
+      <option value="tr">Türkçe</option>
+      <option value="en">English</option>
+      <option value="de">Deutsch</option>
+      <option value="es">Español</option>
+      <option value="fr">Français</option>
+    </select>
+  </div>
+</footer>
+
+<div id="winPopup" role="alert" aria-live="assertive"></div>
+
+<script>
+  const animals = ['🐶','🐱','🐰','🦊','🐻','🐼','🐯','🦁','🐸','🐵'];
+  const gridSize = 30;
+
+  const game = document.getElementById('game');
+  const balanceStatus = document.getElementById('balanceStatus');
+  const betValueEl = document.getElementById('betValue');
+  const spinBtn = document.getElementById('spinBtn');
+  const betMinus = document.getElementById('betMinus');
+  const betPlus = document.getElementById('betPlus');
+  const autoSpinBtn = document.getElementById('autoSpinBtn');
+  const adBtn = document.getElementById('adBtn');
+  const langSelect = document.getElementById('langSelect');
+  const winPopup = document.getElementById('winPopup');
+
+  let balance = 1000;
+  let bet = 10;
+  let autoSpin = false;
+  let autoSpinInterval = null;
+  let isSpinning = false;
+
+ 
+  for(let i=0; i<gridSize; i++){
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    game.appendChild(cell);
+  }
+
+ 
+  function updateTexts(){
+    balanceStatus.textContent = `Bakiye: ${balance} ₺`;
+    betValueEl.textContent = `${bet} ₺`;
+  }
+  updateTexts();
+
+ 
+  function checkWin(arr){
+   
+    let won = false;
+    const cells = game.children;
+
+   
+    for(let c of cells){
+      c.classList.remove('highlight');
+    }
+
+    for(let i=0; i <= arr.length-3; i++){
+      if(arr[i] === arr[i+1] && arr[i+1] === arr[i+2]){
+        won = true;
+        
+        for(let j=i; j<= i+2; j++){
+          cells[j].classList.add('highlight');
+        }
+      }
+    }
+
+    if(won){
+      const winAmount = bet * 10;
+      balance += winAmount;
+      updateTexts();
+      showWinPopup(`Kazandınız! +${winAmount} ₺`);
+    }
+  }
+
+ 
+  function showWinPopup(msg){
+    winPopup.textContent = msg;
+    winPopup.classList.add('show');
+    setTimeout(() => {
+      winPopup.classList.remove('show');
+    }, 1400);
+  }
+
+  
+  function spin(){
+    if(isSpinning) return;
+    if(bet > balance){
+      alert('Yetersiz bakiye!');
+      if(autoSpin) stopAutoSpin();
+      return;
+    }
+    isSpinning = true;
+
+    balance -= bet;
+    updateTexts();
+
+    spinBtn.disabled = true;
+    betMinus.disabled = true;
+    betPlus.disabled = true;
+    autoSpinBtn.disabled = true;
+    adBtn.disabled = true;
+
+    const cells = game.children;
+    let newAnimals = [];
+    for(let i=0; i<gridSize; i++){
+      const randomAnimal = animals[Math.floor(Math.random()*animals.length)];
+      newAnimals.push(randomAnimal);
+    }
+
+    for(let i=0; i<gridSize; i++){
+      const cell = cells[i];
+      cell.classList.remove('highlight');
+      cell.classList.remove('drop');
+      setTimeout(() => {
+        cell.textContent = newAnimals[i];
+        cell.classList.add('drop');
+      }, i*30);
+    }
+
+    setTimeout(() => {
+      checkWin(newAnimals);
+      spinBtn.disabled = false;
+      betMinus.disabled = false;
+      betPlus.disabled = false;
+      autoSpinBtn.disabled = false;
+      adBtn.disabled = false;
+      isSpinning = false;
+    }, gridSize*30 + 400);
+  }
+
+ 
+  function startAutoSpin(){
+    if(balance < bet){
+      alert('Yetersiz bakiye!');
+      stopAutoSpin();
+      return;
+    }
+    autoSpin = true;
+    autoSpinBtn.classList.add('active');
+    spin();
+    autoSpinInterval = setInterval(() => {
+      if(balance < bet){
+        stopAutoSpin();
+        return;
+      }
+      spin();
+    }, 1500);
+  }
+  function stopAutoSpin(){
+    autoSpin = false;
+    autoSpinBtn.classList.remove('active');
+    clearInterval(autoSpinInterval);
+  }
+
+  
+  spinBtn.addEventListener('click', spin);
+
+  autoSpinBtn.addEventListener('click', () => {
+    if(autoSpin){
+      stopAutoSpin();
+    } else {
+      startAutoSpin();
+    }
+  });
+
+  betMinus.addEventListener('click', () => {
+    if(bet > 10) {
+      bet -= 10;
+      updateTexts();
+    }
+  });
+
+  betPlus.addEventListener('click', () => {
+    if(bet < 1000){
+      bet += 10;
+      updateTexts();
+    }
+  });
+
+  
+  adBtn.addEventListener('click', () => {
+    if(adBtn.classList.contains('loading')) return;
+    adBtn.classList.add('loading');
+    adBtn.textContent = 'Yükleniyor...';
+  
+    setTimeout(() => {
+      balance += 20;
+      updateTexts();
+      adBtn.classList.remove('loading');
+      adBtn.textContent = 'Reklam İzle +20 ₺';
+    }, 3000);
+  });
+
+
+  langSelect.addEventListener('change', () => {
+    const lang = langSelect.value;
+   
+    const titles = {
+      tr: 'Hayvan Bonanza',
+      en: 'Animal Bonanza',
+      de: 'Tier-Bonanza',
+      es: 'Bonanza Animal',
+      fr: 'Bonanza Animalier'
+    };
+    document.getElementById('title').textContent = titles[lang] || 'Hayvan Bonanza';
+  });
+</script>
+
+</body>
+</html>
