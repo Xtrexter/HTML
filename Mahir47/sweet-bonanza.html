@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Maho Game - Sweet Bonanza Style Slot</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@800&display=swap');
+
+:root {
+  --candy-pink: #ff94ca;
+  --candy-purple: #bd78f0;
+  --candy-blue: #7fc6ff;
+  --candy-yellow: #ffdb5c;
+  --candy-green: #68e38e;
+  --bg-gradient-start: #ffb7db;
+  --bg-gradient-end: #ffc5a1;
+  --button-gradient-start: #ff6dc6;
+  --button-gradient-end: #ab00cd;
+  --shadow-glow: rgba(255, 109, 198, 0.8);
+  --cell-bg: #fff0fa;
+  --cell-border: #ffc8ef;
+  --text-shadow: 0 0 5px #ff6dc6;
+  --font-family: 'Poppins', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0; padding: 30px;
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  font-family: var(--font-family);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  user-select: none;
+  overflow-x: hidden;
+}
+
+#header {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--candy-purple);
+  text-shadow:
+    2px 2px 4px #ff45d4,
+    0 0 15px var(--button-gradient-start);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  user-select:none;
+  letter-spacing: 0.1em;
+}
+
+#header .logo {
+  font-size: 3.6rem;
+  filter: drop-shadow(0 0 5px #ff72e6);
+  transform: rotate(-5deg);
+  user-select:none;
+}
+
+#game {
+  width: 500px;
+  max-width: 95vw;
+  background: linear-gradient(145deg, #fff0fa, #ffd2f6);
+  border-radius: 30px;
+  box-shadow:
+    inset 0 0 50px 15px #ffaddb88,
+    0 15px 50px rgba(249, 73, 206, 0.5);
+  padding: 30px 40px 50px;
+  position: relative;
+}
+
+#grid {
+  display: grid;
+  grid-template-columns: repeat(5, 80px);
+  grid-template-rows: repeat(5, 80px);
+  gap: 18px;
+  justify-content: center;
+  perspective: 1000px;
+  margin-bottom: 30px;
+}
+
+.cell {
+  background: linear-gradient(145deg, #fff0fa, #ffc9e9);
+  border-radius: 25px;
+  border: 3px solid var(--cell-border);
+  box-shadow:
+    0 8px 20px rgba(255 199 233 / 0.6),
+    inset 0 3px 8px 2px #fff0fa;
+  font-size: 50px;
+  color: #d72ca1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: default;
+  user-select: none;
+  position: relative;
+  filter: drop-shadow(0 0 4px #ff5bd3);
+  transform-style: preserve-3d;
+  transform-origin: center bottom;
+  transition: transform 0.5s cubic-bezier(0.68,-0.55,0.265,1.55), box-shadow 0.3s ease-in-out;
+  /* initial 3d scale for perspective pop */
+  transform: translateZ(0) rotateX(0deg);
+}
+
+.cell.spin {
+  animation: spinFlip 0.6s ease forwards;
+}
+
+@keyframes spinFlip {
+  0% { transform: rotateX(0deg) translateZ(0); }
+  50% { transform: rotateX(90deg) translateZ(15px); }
+  100% { transform: rotateX(0deg) translateZ(0); }
+}
+
+.cell.win {
+  animation: pulseGlow 0.7s infinite alternate ease-in-out;
+  box-shadow:
+    0 0 18px 10px #ff28d6cc,
+    inset 0 0 24px 8px #ff71e6cc;
+  transform: scale(1.25) translateZ(20px);
+  z-index: 10;
+}
+
+.cell.explode {
+  animation: explodeAnim 0.7s forwards ease-out;
+  box-shadow: none;
+  pointer-events: none;
+  transform-origin: center center;
+  filter: drop-shadow(0 0 0 transparent);
+}
+
+@keyframes pulseGlow {
+  0% {
+    box-shadow:
+      0 0 18px 10px #ff00ccbb,
+      inset 0 0 18px 8px #ff5bffe1;
+    transform: scale(1.25);
+  }
+  100% {
+    box-shadow:
+      0 0 32px 18px #ff00ffd0,
+      inset 0 0 32px 16px #ff94ffc0;
+    transform: scale(1.4);
+  }
+}
+
+@keyframes explodeAnim {
+  0% {
+    transform: scale(1) rotate(0) translateZ(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(3.5) rotate(1080deg) translateZ(100px);
+    opacity: 0;
+  }
+}
+
+#start-button {
+  width: 100%;
+  background: linear-gradient(45deg, var(--button-gradient-start), var(--button-gradient-end));
+  border: none;
+  border-radius: 30px;
+  padding: 20px 0;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: white;
+  cursor: pointer;
+  text-shadow: 0 0 12px #fff;
+  box-shadow:
+    0 10px 35px var(--button-gradient-end),
+    inset 0 0 25px 5px #ff6ac6;
+  transition: background 0.35s ease-in-out, box-shadow 0.35s ease-in-out;
+  user-select: none;
+  letter-spacing: 1.2px;
+}
+
+#start-button:hover:not(:disabled) {
+  background: linear-gradient(45deg, var(--button-gradient-end), var(--button-gradient-start));
+  box-shadow:
+    0 14px 40px #ff6ad8,
+    inset 0 0 35px 8px #ff6fd7;
+  transform: scale(1.05);
+}
+
+#start-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  box-shadow: none;
+  transform: none;
+}
+
+#scoreboard, #balance, #bet-container {
+  background: linear-gradient(45deg, var(--candy-purple), var(--candy-pink));
+  padding: 14px 28px;
+  border-radius: 30px;
+  color: white;
+  font-weight: 700;
+  font-size: 1.5rem;
+  box-shadow: 0 0 20px var(--candy-pink);
+  margin-bottom: 18px;
+  text-align: center;
+  user-select:none;
+}
+
+#bet-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+#bet-container button {
+  background: var(--button-gradient-start);
+  border: none;
+  border-radius: 22px;
+  padding: 8px 18px;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 8px 16px var(--candy-pink);
+  text-shadow: 0 0 6px #fff;
+  user-select:none;
+  transition: background 0.3s ease-in-out;
+}
+
+#bet-container button:hover:not(:disabled) {
+  background: var(--button-gradient-end);
+  box-shadow: 0 11px 25px #ff53d6;
+}
+
+#bet-container button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  box-shadow: none;
+}
+
+#multiplier {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--candy-pink);
+  text-shadow: 0 0 14px #ff52e6;
+  user-select:none;
+  margin-bottom: 12px;
+  min-height: 2rem;
+  user-select:none;
+  letter-spacing: 0.1em;
+}
+
+#footer {
+  margin-top: 25px;
+  color: #9f5ac6;
+  font-style: italic;
+  font-size: 1.1rem;
+  user-select:none;
+  text-align:center;
+  letter-spacing: 0.05em;
+  opacity: 0.9;
+}
+
+</style>
+</head>
+<body>
+  <div id="header" aria-label="Oyun başlığı">
+    <div class="logo" aria-hidden="true">🍭</div>
+    Maho Game
+  </div>
+
+  <main id="game" role="main" aria-label="Maho Game slot oyunu">
+    <div id="grid" aria-live="polite" aria-atomic="true" aria-relevant="additions removals"></div>
+
+    <div id="multiplier" aria-live="polite" aria-atomic="true"></div>
+
+    <div id="balance" aria-live="polite" aria-atomic="true">Bakiye: 1000 ₺</div>
+
+    <div id="bet-container" aria-label="Bahis ayarları">
+      <button id="bet-decrease" aria-label="Bahsi azaltı">-</button>
+      <div id="bet-value" aria-live="polite" aria-atomic="true" aria-label="Bahis miktarı">25 ₺</div>
+      <button id="bet-increase" aria-label="Bahsi artır">+</button>
+    </div>
+
+    <button id="start-button" aria-live="polite" aria-label="Spin yap düğmesi">Spin Yap</button>
+  </main>
+
+  <footer id="footer" aria-label="Oyun açıklaması ve telif hakkı">
+    Maho Game © 2024 — Eğlence amaçlı profesyonel slot oyunu
+  </footer>
+
+<script>
+(() => {
+  const gridElement = document.getElementById('grid');
+  const startButton = document.getElementById('start-button');
+  const balanceDisplay = document.getElementById('balance');
+  const betValueElem = document.getElementById('bet-value');
+  const betDecreaseBtn = document.getElementById('bet-decrease');
+  const betIncreaseBtn = document.getElementById('bet-increase');
+  const multiplierDisplay = document.getElementById('multiplier');
+
+  const rows = 5;
+  const cols = 5;
+
+  // Symbol set with values and colors (using emoji for simplicity)
+  const symbols = [
+    { emoji: '🍎', value: 5 },
+    { emoji: '🍇', value: 10 },
+    { emoji: '🍒', value: 15 },
+    { emoji: '🍌', value: 20 },
+    { emoji: '🍬', value: 25 },
+    { emoji: '🍭', value: 30 },
+    { emoji: '🍉', value: 35 },
+    { emoji: '🍫', value: 50 }
+  ];
+
+  let grid = [];
+  let balance = 1000;
+  let bet = 25;
+  let multiplier = 1;
+
+  // Create cells with landing animation delay
+  function createGrid() {
+    gridElement.innerHTML = '';
+    grid = [];
+    for (let r = 0; r < rows; r++) {
+      const row = [];
+      for (let c = 0; c < cols; c++) {
+        const cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.setAttribute('aria-label', 'Slot sembolü');
+        // initial transform style for combo use in spin animation
+        cell.style.transform = "rotateX(0deg)";
+        gridElement.appendChild(cell);
+        row.push(cell);
+      }
+      grid.push(row);
+    }
+  }
+
+  function fillGridRandom(spinDelay=false) {
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        // choose random symbol
+        const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+        const cell = grid[r][c];
+        if(spinDelay){
+          // Add spin animation and delay by position for reel effect
+          setTimeout(() => {
+            applySymbolToCell(cell, symbol);
+            cell.classList.add('spin');
+            setTimeout(() => cell.classList.remove('spin'), 700);
+          }, (r + c*1.3) * 90);
+        } else {
+          applySymbolToCell(cell, symbol);
+          cell.classList.remove('win','explode','spin');
+          cell.style.zIndex = 1;
+        }
+      }
+    }
+  }
+
+  function applySymbolToCell(cell, symbol) {
+    cell.textContent = symbol.emoji;
+    cell.dataset.value = symbol.value;
+  }
+
+  function getMatches() {
+    const matches = [];
+
+    // Horizontal matches
+    for (let r = 0; r < rows; r++) {
+      let count = 1;
+      for(let c = 1; c < cols; c++) {
+        if(grid[r][c].textContent === grid[r][c-1].textContent) {
+          count++;
+        } else {
+          if(count >= 3){
+            for(let k = c - count; k < c; k++){
+              matches.push(grid[r][k]);
+            }
+          }
+          count = 1;
+        }
+      }
+      if(count >= 3){
+        for(let k = cols - count; k < cols; k++){
+          matches.push(grid[r][k]);
+        }
+      }
+    }
+
+    // Vertical matches
+    for(let c=0; c < cols; c++){
+      let count = 1;
+      for(let r=1; r < rows; r++){
+        if(grid[r][c].textContent === grid[r-1][c].textContent){
+          count++;
+        } else {
+          if(count >= 3){
+            for(let k = r-count; k < r; k++){
+              matches.push(grid[k][c]);
+            }
+          }
+          count = 1;
+        }
+      }
+      if(count >= 3){
+        for(let k = rows - count; k < rows; k++){
+          matches.push(grid[k][c]);
+        }
+      }
+    }
+
+    return [...new Set(matches)];
+  }
+
+  function explodeMatches(matches){
+    return new Promise((resolve) => {
+      if(matches.length === 0){
+        resolve(0);
+        return;
+      }
+      let totalPoints = 0;
+      matches.forEach((cell,i) => {
+        setTimeout(() => {
+          cell.classList.add('explode');
+          cell.style.zIndex = 20;
+          totalPoints += Number(cell.dataset.value);
+          burstParticles(cell);
+        }, i * 70);
+      });
+      setTimeout(() => {
+        matches.forEach(cell => {
+          const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+          applySymbolToCell(cell, symbol);
+          cell.classList.remove('explode','win');
+          cell.style.zIndex = 1;
+        });
+        resolve(totalPoints);
+      }, matches.length * 80 + 700);
+    });
+  }
+
+  // Create a simple burst particle effect at symbol location
+  function burstParticles(cell){
+    const count = 10;
+    const rect = cell.getBoundingClientRect();
+    for(let i=0; i<count; i++){
+      const particle = document.createElement('div');
+      particle.style.position = 'fixed';
+      particle.style.left = (rect.left + rect.width/2) + 'px';
+      particle.style.top = (rect.top + rect.height/2) + 'px';
+      particle.style.width = particle.style.height = '8px';
+      particle.style.backgroundColor = ['#ff5995','#ff7fdc','#fbc8ff','#ff34c8','#ffa6d3'][Math.floor(Math.random()*5)];
+      particle.style.borderRadius = '50%';
+      particle.style.pointerEvents = 'none';
+      particle.style.zIndex = 9999;
+
+      document.body.appendChild(particle);
+
+      const angle = Math.random()*2*Math.PI;
+      const radius = 50 + Math.random()*30;
+      const dx = Math.cos(angle)*radius;
+      const dy = Math.sin(angle)*radius;
+
+      particle.animate([
+        { transform: 'translate(0,0) scale(1)', opacity: 1 },
+        { transform: `translate(${dx}px,${dy}px) scale(0)`, opacity: 0 }
+      ], {
+        duration: 700,
+        easing: 'ease-out',
+        fill: 'forwards'
+      });
+
+      setTimeout(() => {
+        particle.remove();
+      }, 700);
+    }
+  }
+
+  async function spinAnimation(){
+    if(balance < bet){
+      alert('Yeterli bakiyeniz yok!');
+      return;
+    }
+
+    startButton.disabled = true;
+    betDecreaseBtn.disabled = true;
+    betIncreaseBtn.disabled = true;
+
+    balance -= bet;
+    updateBalanceDisplay();
+
+    multiplier = 1;
+    multiplierDisplay.textContent = '';
+
+    // Spin animation with cascade delay for reel effect
+    fillGridRandom(true);
+
+    // Wait animation duration (max delay approx 5*1.3*90 + 700 ~ 1300 + 700 = 2000ms)
+    await new Promise(r => setTimeout(r, 2100));
+
+    // Cascade matching and exploding combo
+    let totalSpinPoints = 0;
+    while(true){
+      const matches = getMatches();
+      if(matches.length === 0) break;
+
+      matches.forEach(cell => cell.classList.add('win'));
+      const points = await explodeMatches(matches);
+      totalSpinPoints += points * multiplier;
+
+      multiplier = Math.min(4, multiplier * 1.5);
+      multiplierDisplay.textContent = 'Çarpan: ×' + multiplier.toFixed(2);
+
+      await new Promise(r => setTimeout(r, 400));
+    }
+
+    if(totalSpinPoints > 0){
+      balance += Math.floor(totalSpinPoints);
+      updateBalanceDisplay();
+      setTimeout(() => multiplierDisplay.textContent = '', 3500);
+    }
+
+    updateBetControls();
+
+    startButton.disabled = false;
+    betDecreaseBtn.disabled = false;
+    betIncreaseBtn.disabled = false;
+  }
+
+  function updateBalanceDisplay(){
+    balanceDisplay.textContent = `Bakiye: ${balance.toLocaleString('tr-TR')} ₺`;
+  }
+
+  function updateBetControls(){
+    betValueElem.textContent = `${bet} ₺`;
+    betDecreaseBtn.disabled = bet <= 5;
+    betIncreaseBtn.disabled = bet >= balance;
+    startButton.disabled = balance < bet;
+  }
+
+  // Bet +/- handlers with step 5 and upper bound by balance
+  betDecreaseBtn.addEventListener('click', () => {
+    if(bet > 5){
+      bet = Math.max(5, bet - 5);
+      updateBetControls();
+    }
+  });
+
+  betIncreaseBtn.addEventListener('click', () => {
+    if(bet < balance){
+      bet = Math.min(balance, bet + 5);
+      updateBetControls();
+    }
+  });
+
+  startButton.addEventListener('click', spinAnimation);
+
+  // Init
+  createGrid();
+  fillGridRandom();
+  updateBalanceDisplay();
+  updateBetControls();
+
+})();
+</script>
+</body>
+</html>
+

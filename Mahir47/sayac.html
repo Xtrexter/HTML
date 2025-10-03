@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sayaç Uygulaması</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background-color: lightskyblue;
+            padding: 10px;
+            text-align: center;
+        }
+        h1 {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <input type="button" onclick="arttir()" value="Sayıyı Artır">
+    <h1 id="sayac">0</h1>
+    <input type="button" onclick="azalt()" value="Sayıyı Azalt">
+</div>
+
+<script>
+    function arttir() {
+      
+        let sayacElement = document.getElementById("sayac");
+        sayacElement.innerText = parseInt(sayacElement.innerText) + 1;
+    }
+
+    function azalt() {
+      
+        let sayacElement = document.getElementById("sayac");
+        sayacElement.innerText = parseInt(sayacElement.innerText) - 1;
+    }
+</script>
+
+</body>
+</html>

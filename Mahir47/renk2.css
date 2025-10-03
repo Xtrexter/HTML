@@ -1,0 +1,54 @@
+body {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    height: 100vh;
+
+    background-color: #f0f0f0;
+
+}
+
+
+.kutu {
+
+    width: 200px; 
+
+    height: 200px;
+
+    margin: 20px;
+
+    transition: width 0.5s; 
+
+}
+
+
+.kutu1 {
+
+    background-color: red; 
+
+}
+
+
+.kutu2 {
+
+    background-color: green; 
+
+}
+
+
+.kutu3 {
+
+    background-color: blue; 
+
+}
+
+
+.kutu:hover {
+
+    width: 1000px; 
+
+}

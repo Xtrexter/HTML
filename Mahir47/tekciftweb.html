@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sayı İşlemleri</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input[type="number"] {
+            margin-bottom: 10px;
+        }
+        button {
+            margin-right: 5px;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Sayı İşlemleri</h1>
+    <input type="number" id="numberInput" placeholder="Bir sayı girin">
+    <br>
+    <button onclick="checkEvenOdd()">Tek/Çift</button>
+    <button onclick="checkPositiveNegative()">Pozitif/Negatif</button>
+    <button onclick="addNumber()"> Yeni Sayı Ekle</button>
+    <button onclick="calculateSum()">Girilen Sayılar Hesapla</button>
+    <br>
+    <div class="result" id="result"></div>
+
+    <script>
+        let numbers = [];
+        let total = 0;
+
+        function checkEvenOdd() {
+            const number = parseFloat(document.getElementById('numberInput').value);
+            if (!isNaN(number)) {
+                const result = (number % 2 === 0) ? "Çift" : "Tek";
+                document.getElementById('result').innerText = `Sonuç: ${result}`;
+            } else {
+                document.getElementById('result').innerText = "Lütfen geçerli bir sayı girin.";
+            }
+        }
+
+        function checkPositiveNegative() {
+            const number = parseFloat(document.getElementById('numberInput').value);
+            if (!isNaN(number)) {
+                const result = (number >= 0) ? "Pozitif" : "Negatif";
+                document.getElementById('result').innerText = `Sonuç: ${result}`;
+            } else {
+                document.getElementById('result').innerText = "Lütfen geçerli bir sayı girin.";
+            }
+        }
+
+        function addNumber() {
+            const number = parseFloat(document.getElementById('numberInput').value);
+            if (!isNaN(number)) {
+                numbers.push(number);
+                document.getElementById('numberInput').value = ''; 
+                document.getElementById('result').innerText = `Girilen Sayılar: ${numbers.join(', ')}`;
+            } else {
+                document.getElementById('result').innerText = "Lütfen geçerli bir sayı girin.";
+            }
+        }
+
+        function calculateSum() {
+            total = numbers.reduce((acc, curr) => acc + curr, 0);
+            const sumExpression = numbers.join(' + ') + ` = ${total}`;
+            document.getElementById('result').innerText = `Girilen Sayılar: ${sumExpression}`;
+        }
+    </script>
+
+</body>
+</html>

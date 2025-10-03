@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <p>1-100</p>
+    <input type="number" id="tahminInput" min="1" max="100">
+    <button onclick="tahminYap()">Tahmin Et</button>
+    <button onclick="temizle()">Temizle</button>
+    <div id="sonuc"></div>
+    <div id="kalanTahmin">Kalan Tahmin Hakkı: 10</div>
+
+    <script>
+        const rastgeleSayi = Math.floor(Math.random() * 100) + 1;
+        let kalanHak = 10;
+
+        function tahminYap() {
+            const tahmin = parseInt(document.getElementById("tahminInput").value);
+            const sonucDiv = document.getElementById("sonuc");
+            const kalanTahminDiv = document.getElementById("kalanTahmin");
+
+            if (isNaN(tahmin) || tahmin < 1 || tahmin > 100) {
+                sonucDiv.textContent = "Lütfen 1 ile 100 arasında bir sayı girin.";
+                return;
+            }
+
+            kalanHak--;
+            if (tahmin === rastgeleSayi) {
+                sonucDiv.textContent = "Tebrikler! Doğru tahmin ettiniz.";
+            } else {
+                sonucDiv.textContent = tahmin < rastgeleSayi ? "Daha büyük bir sayı girin." : "Daha küçük bir sayı girin.";
+            }
+
+            if (kalanHak > 0) {
+                kalanTahminDiv.textContent = "Kalan Tahmin Hakkı: " + kalanHak;
+            } else {
+                sonucDiv.textContent = "Tahmin hakkınız kalmadı! Doğru sayı: " + rastgeleSayi;
+            }
+        }
+
+        function temizle() {
+            document.getElementById("tahminInput").value = ""; 
+            document.getElementById("sonuc").textContent = ""; 
+            kalanHak = 10; 
+            document.getElementById("kalanTahmin").textContent = "Kalan Tahmin Hakkı: " + kalanHak; 
+        }
+    </script>
+</body>
+</html>

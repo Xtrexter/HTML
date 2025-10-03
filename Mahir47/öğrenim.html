@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://getbootstrap.com/docs/4.6/getting-started/introduction/">
+
+    <title>Resim Galerisi</title>
+
+    <style>
+
+        .carousel-item img {
+
+            width: 100%;
+
+            height: auto;
+
+        }
+
+        .carousel-caption {
+
+            background: rgba(0, 0, 0, 0.5);
+
+            border-radius: 5px;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<div class="container mt-5">
+
+    <h2>Resim Galerisi</h2>
+
+    <div id="galeri" class="carousel slide" data-ride="carousel">
+
+        <ul class="carousel-indicators">
+
+            <li data-target="#galeri" data-slide-to="0" class="active"></li>
+
+            <li data-target="#galeri" data-slide-to="1"></li>
+
+            <li data-target="#galeri" data-slide-to="2"></li>
+
+           
+
+        </ul>
+
+        <div class="carousel-inner">
+
+            <div class="carousel-item active">
+
+                <img src="SahilYolu.jpg" width="1100" height="500" alt="Karadeniz Bölgesi, Ordu Sahil Yolu">
+
+                <div class="carousel-caption">
+
+                    <h3>Türkiye</h3>
+
+                    <p>Karadeniz Bölgesi, Ordu Sahil Yolu</p>
+
+                </div>
+
+            </div>
+
+            <div class="carousel-item">
+
+                <img src="saat.jpg" width="1100" height="500" alt="Ege Bölgesi, İzmir Saat Kulesi">
+
+                <div class="carousel-caption">
+
+                    <h3>Türkiye</h3>
+
+                    <p>Ege Bölgesi, İzmir Saat Kulesi</p>
+
+                </div>
+
+            </div>
+
+            <div class="carousel-item">
+
+                <img src="saat.jpg" alt="Placeholder Resim 3">
+
+                <div class="carousel-caption">
+
+                    <h3>Türkiye</h3>
+
+                    <p>Placeholder Resim 3 Açıklaması</p>
+
+                </div>
+
+            </div>
+
+          
+
+        </div>
+
+        <a class="carousel-control-prev" href="#galeri" data-slide="prev">
+
+            <span class="carousel-control-prev-icon"></span> 
+
+        </a>
+
+        <a class="carousel-control-next" href="#galeri" data-slide="next">
+
+            <span class="carousel-control-next-icon"></span> 
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

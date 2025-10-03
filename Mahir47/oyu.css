@@ -1,0 +1,39 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.panda-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.panda-info {
+    margin-bottom: 20px;
+}
+
+.more-info {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #e9ecef;
+    display: none; /* Başlangıçta gizli */
+}

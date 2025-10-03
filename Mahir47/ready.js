@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#ekran').css({
+                'background-color': 'gray',
+                'color': 'orange'
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="ekran">Bu bir örnek metin.</div>
+</body>
+</html>

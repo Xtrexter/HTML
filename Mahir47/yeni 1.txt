@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MAHOX Gaming</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+  :root {
+    --primary-color: #5d21a1;
+    --secondary-color: #f39c12;
+    --background-color: linear-gradient(135deg, #f0dbf5, #ab7fdc);
+    --button-bg: #6a4c93;
+    --button-hover-bg: #843fc8;
+    --font-family: 'Fredoka One', cursive, Arial, sans-serif;
+    --error-color: #e74c3c;
+    --success-color: #2ecc71;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; padding: 0;
+    background: var(--background-color);
+    min-height: 100vh;
+    font-family: var(--font-family);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #welcome-screen {
+    text-align: center;
+    color: white;
+  }
+  #welcome-screen h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+  }
+  #welcome-screen button {
+    background: var(--button-bg);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: 700;
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin: 10px;
+    transition: background-color 0.3s ease;
+  }
+  #welcome-screen button:hover {
+    background: var(--button-hover-bg);
+  }
+
+  #modal-container {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+  }
+
+  #account-form-container {
+    background: white;
+    border-radius: 20px;
+    width: 380px;
+    padding: 24px;
+    box-shadow: 0 16px 50px rgba(0,0,0,0.35);
+    position: relative;
+    font-family: var(--font-family);
+  }
+
+  #account-form h2 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  #account-form label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--primary-color);
+  }
+
+  #account-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 14px;
+    border-radius: 14px;
+    border: 2px solid #ccc;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+  }
+  #account-form input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+  }
+
+  .account-action-buttons button {
+    background: var(--primary-color);
+    border: none;
+    border-radius: 26px;
+    width: 100%;
+    color: white;
+    font-weight: 700;
+    padding: 12px 0;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  .account-action-buttons button:hover {
+    background: #843fc8;
+  }
+
+  #create-account-message,
+  #login-message {
+    font-weight: 700;
+    text-align: center;
+    margin-top: 10px;
+    min-height: 20px;
+  }
+  #create-account-message.error,
+  #login-message.error {
+    color: var(--error-color);
+  }
+  #create-account-message.success,
+  #login-message.success {
+    color: var(--success-color);
+  }
+
+  #casino-container {
+    display: none;
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 16px 35px rgba(0,0,0,0.3);
+    width: 520px;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+  }
+  #balance-display {
+    font-size: 1.65rem;
+    color: var(--primary-color);
+    font-weight: 700;
+    margin: 8px 0 18px 0;
+  }
+  #bet-controls {
+    margin-bottom: 20px;
+  }
+  #bet-controls button {
+    background: var(--button-bg);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-weight: 700;
+    padding: 8px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+  }
+  #bet-amount {
+    font-size: 1.8rem;
+    font-weight: 900;
+    display: inline-block;
+    min-width: 80px;
+    color: var(--secondary-color);
+  }
+  #controls {
+    margin-bottom: 12px;
+  }
+  #controls button {
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 24px;
+    font-size: 1.25rem;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div id="welcome-screen">
+  <h1>MAHOX Gaming</h1>
+  <button id="create-account-btn">Hesap Oluştur</button>
+  <button id="login-btn">Hesaba Giriş Yap</button>
+</div>
+
+<div id="modal-container">
+  <div id="account-form-container">
+    <button id="account-close-btn" aria-label="Close account form">×</button>
+    <h2 id="account-title">Account Management</h2>
+    <div id="account-forms-wrapper">
+      <form id="create-account-form" novalidate>
+        <h3>Create New Account</h3>
+        <label for="create-username">Username</label>
+        <input type="text" id="create-username" name="username" required minlength="3" maxlength="16" placeholder="Your Username" />
+        <label for="create-email">Email</label>
+        <input type="email" id="create-email" name="email" required placeholder="example@mail.com" />
+        <label for="create-password">Password</label>
+        <input type="password" id="create-password" name="password" required minlength="6" placeholder="Minimum 6 characters" />
+        <div class="account-action-buttons">
+          <button id="create-account-submit-btn" type="submit">Create Account</button>
+          <button type="button" id="show-login-form-btn">Already have an account? Login</button>
+        </div>
+        <div id="create-account-message"></div>
+      </form>
+
+      <form id="login-form" novalidate style="display: none;">
+        <h3>Login to Account</h3>
+        <label for="login-username">Username</label>
+        <input type="text" id="login-username" name="username" required placeholder="Your Username" />
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" name="password" required placeholder="Your Password" />
+        <div class="account-action-buttons">
+          <button id="login-submit-btn" type="submit">Login</button>
+          <button type="button" id="show-create-form-btn">New user? Create Account</button>
+        </div>
+        <div id="login-message"></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="casino-container">
+  <h1>MAHOX Slot Game</h1>
+  <div id="balance-display">Balance: 10,000 🪙</div>
+  <div id="bet-controls">
+    <button id="bet-decrease">-</button>
+    <span id="bet-amount">500</span>
+    <button id="bet-increase">+</button>
+  </div>
+  <div id="controls">
+    <button id="spin-btn">Spin</button>
+    <button id="auto-btn">Auto Play</button>
+  </div>
+  <div id="reels-container" aria-label="Game reels" role="list">
+    <div class="reel">
+      <div class="reel-strip">
+        <div class="symbol">🍒</div>
+        <div class="symbol">🍋</div>
+        <div class="symbol">🍊</div>
+        <div class="symbol">🍉</div>
+        <div class="symbol">🍇</div>
+      </div>
+    </div>
+    <div class="reel">
+      <div class="reel-strip">
+        <div class="symbol">🍒</div>
+        <div class="symbol">🍋</div>
+        <div class="symbol">🍊</div>
+        <div class="symbol">🍉</div>
+        <div class="symbol">🍇</div>
+      </div>
+    </div>
+    <div class="reel">
+      <div class="reel-strip">
+        <div class="symbol">🍒</div>
+        <div class="reel-strip">
+          <div class="symbol">🍋</div>
+          <div class="symbol">🍊</div>
+          <div class="symbol">🍉</div>
+          <div class="symbol">🍇</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  let userRegistered = false;
+  let currentUsername = null;
+  let balance = 10000;
+
+  const welcomeScreen = document.getElementById('welcome-screen');
+  const modalContainer = document.getElementById('modal-container');
+  const accountCloseBtn = document.getElementById('account-close-btn');
+  const createAccountForm = document.getElementById('create-account-form');
+  const loginForm = document.getElementById('login-form');
+  const createAccountMessage = document.getElementById('create-account-message');
+  const loginMessage = document.getElementById('login-message');
+  const casinoContainer = document.getElementById('casino-container');
+  const balanceDisplay = document.getElementById('balance-display');
+  const betAmountEl = document.getElementById('bet-amount');
+
+  document.getElementById('create-account-btn').addEventListener('click', () => {
+    modalContainer.style.display = 'flex';
+    createAccountForm.style.display = 'block';
+    loginForm.style.display = 'none';
+  });
+
+  document.getElementById('login-btn').addEventListener('click', () => {
+    modalContainer.style.display = 'flex';
+    createAccountForm.style.display = 'none';
+    loginForm.style.display = 'block';
+  });
+
+  accountCloseBtn.addEventListener('click', () => {
+    modalContainer.style.display = 'none';
+  });
+
+  document.getElementById('show-login-form-btn').addEventListener('click', () => {
+    createAccountForm.style.display = 'none';
+    loginForm.style.display = 'block';
+  });
+
+  document.getElementById('show-create-form-btn').addEventListener('click', () => {
+    loginForm.style.display = 'none';
+    createAccountForm.style.display = 'block';
+  });
+
+  createAccountForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('create-username').value.trim();
+    const email = document.getElementById('create-email').value.trim();
+    const password = document.getElementById('create-password').value;
+
+    let users = JSON.parse(localStorage.getItem('mahox_users')) || {};
+    if (users[username]) {
+      createAccountMessage.textContent = 'Kullanıcı adı zaten mevcut.';
+      createAccountMessage.className = 'error';
+      return;
+    }
+
+    users[username] = { username, email, password, balance: 10000 };
+    localStorage.setItem('mahox_users', JSON.stringify(users));
+
+    currentUsername = username;
+    userRegistered = true;
+    balance = users[username].balance;
+
+    updateUI();
+    modalContainer.style.display = 'none';
+  });
+
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('login-username').value.trim();
+    const password = document.getElementById('login-password').value;
+
+    let users = JSON.parse(localStorage.getItem('mahox_users')) || {};
+    const user = users[username];
+
+    if (!user || user.password !== password) {
+      loginMessage.textContent = 'Geçersiz kullanıcı adı veya şifre.';
+      loginMessage.className = 'error';
+      return;
+    }
+
+    currentUsername = username;
+    userRegistered = true;
+    balance = user.balance;
+
+    updateUI();
+    modalContainer.style.display = 'none';
+  });
+
+  function updateUI() {
+    balanceDisplay.textContent = `Balance: ${balance} 🪙`;
+    welcomeScreen.style.display = 'none';
+    casinoContainer.style.display = 'block';
+  }
+})();
+</script>
+</body>
+</html>

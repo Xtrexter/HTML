@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesajlaşma Arayüzü</title>
+    <style>
+        body {
+            background-color: gray;
+            font-weight: bold;
+        }
+
+        #genelCerceve {
+            background-color: lightblue;
+            border-radius: 10px;
+            width: 400px;
+            height: 500px;
+            margin: auto;
+            padding: 10px;
+        }
+
+        #mesajGirisi {
+            background-color: white;
+            border-radius: 10px;
+            width: 100%;
+            height: 70px;
+        }
+
+        #mesajGirisi > img {
+            width: 50px;
+            height: 50px;
+            float: left;
+            margin-left: 30px;
+            margin-top: 10px;
+        }
+
+        #mesajGirisi > input {
+            margin-top: 30px;
+            margin-left: 10px;
+        }
+
+        #mesajKutulari {
+            background-color: white;
+            border-radius: 3px;
+            width: 380px;
+            height: auto;
+            margin-left: 10px;
+            overflow-y: auto;
+            height: 400px; 
+        }
+
+        .gidenMesaj {
+            border-bottom: 2px gray solid;
+            padding: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .gidenMesaj > img {
+            width: 20px;
+            height: 20px;
+            margin: 5px;
+        }
+
+        #tarih {
+            color: gray;
+            font-size: 10px;
+        }
+
+        .silButonu {
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 2px 5px;
+        }
+    </style>
+    <script>
+        function mesajGonder() {
+            var mesaj = document.getElementById("mesaj").value;
+            var d = new Date();
+            var saat = d.getHours();
+            var dakika = d.getMinutes();
+            
+            if (mesaj.trim() === "") {
+                alert("Lütfen bir mesaj giriniz.");
+                return; 
+            }
+            var mesajDiv = document.createElement("div");
+            mesajDiv.className = 'gidenMesaj';
+            mesajDiv.innerHTML = "<img src='mesa.jpg'>" + 
+                mesaj + 
+                "<span id='tarih'>" + saat + ":" + (dakika < 10 ? '0' + dakika : dakika) + "</span>" +
+                "<button class='silButonu' onclick='mesajSil(this)'>Sil</button>";
+            
+            document.getElementById("mesajKutulari").appendChild(mesajDiv);
+            document.getElementById("mesaj").value = "";
+        }
+
+        function mesajSil(button) {
+            var mesajDiv = button.parentElement;
+            mesajDiv.remove();
+        }
+    </script>
+</head>
+<body>
+    <div id="genelCerceve">
+        <div id="mesajGirisi">
+            <img src="mesa.jpg" alt="Profil Resmi">
+            <input type="text" id="mesaj" placeholder="Mesajınızı giriniz.">
+            <input type="button" value="Gönder" onclick="mesajGonder()">
+        </div>
+        <hr>
+        <div id="mesajKutulari">
+        </div>
+    </div>
+</body>
+</html>

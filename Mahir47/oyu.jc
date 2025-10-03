@@ -1,0 +1,26 @@
+function showWeaponInfo() {
+    const weaponSelect = document.getElementById("weaponSelect");
+    const weaponInfo = document.getElementById("weaponInfo");
+    const selectedWeapon = weaponSelect.value;
+
+    let info = "";
+
+    switch (selectedWeapon) {
+        case "pistol":
+            info = "<h3>Tabanca</h3><p>Tabancalar, genellikle kısa menzilli ve hafif silahlardır. Hızlı ateş edebilirler.</p>";
+            break;
+        case "rifle":
+            info = "<h3>Tüfek</h3><p>Tüfekler, daha uzun menzil ve daha yüksek isabet oranı sunan ateşli silahlardır.</p>";
+            break;
+        case "shotgun":
+            info = "<h3>Pompalı Tüfek</h3><p>Pompalı tüfekler, geniş bir mermi dağılımına sahip olup yakın mesafede etkilidir.</p>";
+            break;
+        case "sniper":
+            info = "<h3>Keskin Nişancı Tüfeği</h3><p>Keskin nişancı tüfekleri, uzun menzil ve yüksek isabet oranı ile bilinir.</p>";
+            break;
+        default:
+            info = "<p>Lütfen bir silah seçin.</p>";
+    }
+
+    weaponInfo.innerHTML = info;
+}

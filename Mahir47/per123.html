@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+ 
+</head>
+<body>
+  <div class="container mt-3">
+    <h3>Öğrenci Not Hesaplama</h3>
+    <input id="yazili1" type="number" class="form-control mb-2" placeholder="Yazılı 1">
+    <input id="yazili2" type="number" class="form-control mb-2" placeholder="Yazılı 2">
+    <input id="performans" type="number" class="form-control mb-2" placeholder="Performans">
+    <button onclick="hesapla()" class="btn btn-primary btn-block">Hesapla</button>
+	 <button onclick="reset" class="btn btn-primary btn-block">Hesapla</button>
+    <p id="sonuc"></p>
+  </div>
+
+  <script>
+    function hesapla() {
+      let yazili1 = parseFloat(document.getElementById("yazili1").value);
+      let yazili2 = parseFloat(document.getElementById("yazili2").value);
+      let performans = parseFloat(document.getElementById("performans").value);
+
+      let ortalama = (yazili1 + yazili2 + performans) / 3;
+      let durum = ortalama >= 50 ? `Geçti! Tebrikler!` : `Kaldı`;
+
+      document.getElementById("sonuc").innerText = `Ortalama: ${ortalama.toFixed(2)} - ${durum}`;
+    }
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Animal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Poppins:wght@300;500&display=swap');
+
+        /* Reset and global */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0c27b, #4b1248);
+            color: white;
+            user-select: none;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Intro style */
+        #intro {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(45deg, #FDB813, #D93F3F);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeOut 1s ease forwards;
+            animation-delay: 2s;
+        }
+        #intro h1 {
+            font-family: 'Luckiest Guy', cursive;
+            font-size: 8rem;
+            color: #fff;
+            text-shadow:
+                4px 4px 8px rgba(0,0,0,0.5),
+                0 0 30px #FFF700,
+                0 0 45px #FF8C00,
+                0 0 60px #FF4500,
+                0 0 75px #FF0000;
+            animation: glow 1.5s ease-in-out infinite alternate;
+            user-select:none;
+        }
+        @keyframes glow {
+            0% {
+                text-shadow:
+                    4px 4px 8px rgba(0,0,0,0.5),
+                    0 0 30px #FFF700,
+                    0 0 45px #FF8C00,
+                    0 0 60px #FF4500,
+                    0 0 75px #FF0000;
+            }
+            100% {
+                text-shadow:
+                    6px 6px 12px rgba(0,0,0,0.7),
+                    0 0 60px #FFD700,
+                    0 0 90px #FFA500,
+                    0 0 120px #FF6347,
+                    0 0 150px #FF2400;
+            }
+        }
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                pointer-events: none;
+                visibility: hidden;
+            }
+        }
+
+        /* Auth Screen */
+        #auth-screen {
+            display: none;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #411E5A, #251B37);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            gap: 1.5rem;
+            animation: fadeIn 1s ease forwards;
+        }
+        #auth-screen.active {
+            display: flex;
+        }
+        #auth-screen h2 {
+            font-family: 'Luckiest Guy', cursive;
+            font-size: 3rem;
+            margin-bottom: 0.8rem;
+            color: #FF8C00;
+            text-shadow: 1px 1px 6px #ffb347;
+            user-select:none;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            width: 280px;
+        }
+        input[type="text"], input[type="password"] {
+            padding: 0.8rem 1.2rem;
+            border-radius: 30px;
+            border: none;
+            font-size: 1.1rem;
+            outline: none;
+            background: #44275e;
+            color: #fff;
+            box-shadow: inset 0 0 8px #ff8c00;
+            transition: background 0.3s;
+        }
+        input[type="text"]:focus, input[type="password"]:focus {
+            background: #5a348f;
+            box-shadow: 0 0 14px #ffb347;
+        }
+        button {
+            margin-top: 1rem;
+            background: #ff6f00;
+            border: none;
+            color: #fff;
+            font-weight: 700;
+            padding: 0.85rem 2rem;
+            font-size: 1.3rem;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 0 14px #ff8c00;
+            font-family: 'Poppins', sans-serif;
+            transition: background 0.3s ease;
+            user-select:none;
+        }
+        button:hover, button:focus {
+            background: #ffa726;
+            box-shadow: 0 0 30px #ffd54f;
+        }
+        .switch-auth {
+            margin-top: 1rem;
+            font-size: 1rem;
+            color: #ffb347;
+            cursor: pointer;
+            user-select: none;
+            text-align: center;
+            transition: color 0.3s;
+        }
+        .switch-auth:hover, .switch-auth:focus {
+            color: #fff3b0;
+            text-decoration: underline;
+            outline: none;
+        }
+        #auth-message {
+            color: #ffb3b3;
+            font-weight: 600;
+            font-size: 1rem;
+            min-height: 1.4rem;
+            user-select:none;
+            text-align:center;
+        }
+
+        /* Welcome Message */
+        #welcome-msg {
+            display:none;
+            font-family: 'Luckiest Guy', cursive;
+            font-size: 2.7rem;
+            color: #fff8e1;
+            text-shadow: 2px 2px 10px #ff9600;
+            margin-top: 2rem;
+            text-align: center;
+            user-select:none;
+        }
+
+        /* Game Screen - Merged Styles for the Bonanza Game */
+        #game-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1.5rem 1rem 3rem;
+            background: linear-gradient(135deg, #2d1a52, #030216);
+            user-select:none;
+        }
+        #game-screen.active {
+            display: flex;
+        }
+        #game-screen > header { /* Specific to the Bonanza header */
+            margin: 25px 0 15px;
+            font-size: 3rem;
+            font-weight: 900;
+            color: #ff6f00;
+            text-shadow:
+                0 0 8px #ff6f00aa,
+                0 0 15px #ff6f00cc;
+            letter-spacing: 3px;
+            text-align: center;
+        }
+        #bonanza-game-board { /* Renamed from #game to avoid conflict */
+            position: relative;
+            width: 360px;
+            height: 300px;
+            background: #1f1b3d;
+            border-radius: 25px;
+            padding: 10px;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            gap: 8px;
+            box-shadow:
+                inset 0 0 30px #ff6f0044,
+                0 8px 20px #ff6f0055;
+        }
+        .bonanza-cell { /* Renamed from .cell to avoid conflict */
+            background: linear-gradient(145deg, #3a2c6d, #231a4a);
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.8rem;
+            cursor: default;
+            user-select: none;
+            box-shadow:
+                4px 4px 6px #1f1a3a,
+                -4px -4px 6px #574d94;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+        }
+        .bonanza-cell.highlight {
+            box-shadow:
+                0 0 18px 5px #ff6f00cc,
+                inset 0 0 10px #ff6f00cc;
+            transform: scale(1.3);
+            z-index: 2;
+        }
+        /* Animasyonlar */
+        @keyframes dropAnim {
+            0% {transform: translateY(-100%) scale(0.8); opacity: 0;}
+            100% {transform: translateY(0) scale(1); opacity: 1;}
+        }
+        .bonanza-cell.drop {
+            animation: dropAnim 0.4s ease forwards;
+        }
+        /* Footer */
+        #bonanza-footer { /* Renamed from footer to avoid conflict */
+            margin-top: 20px;
+            width: 360px;
+            background: #271f55;
+            border-radius: 25px;
+            padding: 20px 25px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow:
+                0 8px 25px #ff6f0077;
+        }
+        .status {
+            flex-grow: 1;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffb300;
+            text-shadow:
+                0 0 8px #ffb300aa;
+        }
+        .controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        /* Buttons and selects are styled globally by the first CSS, ensuring consistency */
+        #betControls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #3e2d81;
+            padding: 10px 15px;
+            border-radius: 15px;
+            color: #ffb300;
+            box-shadow: inset 0 0 15px #ffb300bb;
+        }
+        #betValue {
+            min-width: 60px;
+            text-align: center;
+        }
+        #autoSpinBtn {
+            background: #4caf50;
+            color: #fff;
+            box-shadow: 0 5px 10px #4caf5099;
+        }
+        #autoSpinBtn.active {
+            background: #81c784;
+            box-shadow: 0 8px 18px #81c784cc;
+        }
+        #adBtn {
+            background: #2196f3;
+            color: #fff;
+            box-shadow: 0 5px 10px #2196f399;
+        }
+        #adBtn.loading {
+            background: #1565c0;
+            cursor: wait;
+            box-shadow: none;
+        }
+        /* Win popup */
+        #winPopup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: #ff6f00;
+            color: #1b1b1b;
+            padding: 25px 45px;
+            border-radius: 40px;
+            font-size: 2.2rem;
+            font-weight: 900;
+            text-shadow: 0 0 10px #ff9100cc;
+            box-shadow: 0 0 25px #ff6f00cc;
+            user-select: none;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            z-index: 999;
+        }
+        #winPopup.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            pointer-events: auto;
+            animation: popWin 1.4s ease forwards;
+        }
+        @keyframes popWin {
+            0% {transform: translate(-50%, -50%) scale(0.8);}
+            50% {transform: translate(-50%, -50%) scale(1.1);}
+            100% {transform: translate(-50%, -50%) scale(1);}
+        }
+
+        /* Responsive */
+        @media (max-width: 480px){ /* Adjusted for original mobile breakpoint */
+            #game-board { /* Original match-3 game board (now unused) */
+                grid-template-columns: repeat(7, 48px);
+                grid-template-rows: repeat(7, 48px);
+                gap: 6px;
+                padding: 8px;
+                border-radius: 14px;
+            }
+            .cell { /* Original match-3 game cell (now unused) */
+                width: 48px;
+                height: 48px;
+                font-size: 2rem;
+                border-radius: 14px;
+            }
+            #scoreboard { /* Original match-3 game scoreboard (now unused) */
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 420px) { /* Bonanza game specific responsive rules */
+            #bonanza-game-board, #bonanza-footer {
+                width: 100vw;
+                border-radius: 0;
+                padding: 8px;
+                box-shadow: none;
+            }
+            #bonanza-footer {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .controls {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="intro" role="alert" aria-live="assertive" aria-atomic="true">
+        <h1>GARİP</h1>
+    </div>
+
+    <section id="auth-screen" aria-label="Hesap oluştur veya giriş yap">
+        <h2 id="auth-title">Hesap Oluştur</h2>
+        <form id="auth-form" autocomplete="off" novalidate>
+            <div class="form-group">
+                <input type="text" id="username" placeholder="Kullanıcı Adı" minlength="3" maxlength="15" autocomplete="off" required aria-label="Kullanıcı Adı" />
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" placeholder="Şifre" minlength="4" maxlength="20" autocomplete="off" required aria-label="Şifre" />
+            </div>
+            <button type="submit" id="auth-submit-btn" aria-live="polite">Kaydol</button>
+        </form>
+        <div id="auth-message" role="alert" aria-live="assertive" style="height:1.4rem;margin-top:2px;text-align:center;"></div>
+        <div id="switch-auth" class="switch-auth" tabindex="0" role="button" aria-pressed="false" aria-label="Giriş ve Kayıt arasında geçiş yap">Zaten hesabınız var mı? Giriş Yap</div>
+    </section>
+
+    <div id="welcome-msg" role="alert" aria-live="polite" tabindex="0"></div>
+
+    <section id="game-screen" aria-label="Oyun Ekranı">
+        <header id="bonanza-title">Animal</header>
+
+        <div id="bonanza-game-board" aria-label="Oyun Alanı"></div>
+
+        <footer id="bonanza-footer">
+            <div class="status" id="balanceStatus" aria-live="polite">Bakiye: 1000 ₺</div>
+
+            <div class="controls">
+                <div id="betControls" aria-label="Bahis Kontrolleri">
+                    <button id="betMinus" aria-label="Bahis azalt">−</button>
+                    <div id="betValue" aria-live="polite">10 ₺</div>
+                    <button id="betPlus" aria-label="Bahis artır">+</button>
+                </div>
+                <button id="spinBtn" aria-label="Oyna butonu">Oyna</button>
+                <button id="autoSpinBtn" aria-label="Otomatik oynat">Otomatik</button>
+                <button id="adBtn" aria-label="Reklam izleyerek bakiye kazan">Reklam İzle +20 ₺</button>
+                <select id="langSelect" aria-label="Dil seçimi" title="Dil seçimi">
+                    <option value="tr">Türkçe</option>
+                    <option value="en">English</option>
+                    <option value="de">Deutsch</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                </select>
+            </div>
+        </footer>
+
+        <div id="winPopup" role="alert" aria-live="assertive"></div>
+    </section>
+
+    <script>
+        (function(){
+          
+            const animalsAuth = ['🐶', '🐱', '🐰', '🦊', '🐻', '🐼', '🐸']; 
+            const ROWS = 7; 
+            const COLS = 7; 
+
+           
+            const introEl = document.getElementById('intro');
+            const authScreen = document.getElementById('auth-screen');
+            const authForm = document.getElementById('auth-form');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const authTitle = document.getElementById('auth-title');
+            const authSubmitBtn = document.getElementById('auth-submit-btn');
+            const switchAuthBtn = document.getElementById('switch-auth');
+            const authMessage = document.getElementById('auth-message');
+            const welcomeMsg = document.getElementById('welcome-msg');
+            const gameScreen = document.getElementById('game-screen');
+            
+            
+
+            const STORAGE_KEY = 'bonanzaHayvanUsers';
+            let usersDB = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+            let loggedInUser = null;
+
+            let isLoginMode = false;
+
+            
+            function saveUsersDB(){
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(usersDB));
+            }
+            function setAuthMessage(msg, isError=true){
+                authMessage.textContent = msg;
+                authMessage.style.color = isError ? '#ff6b6b' : '#b4f8c8';
+            }
+            function clearAuthMessage(){
+                authMessage.textContent = '';
+            }
+
+           
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    introEl.style.display = 'none';
+                    authScreen.classList.add('active');
+                    usernameInput.focus();
+                }, 2000);
+            });
+
+           
+            function toggleAuthMode(){
+                clearAuthMessage();
+                isLoginMode = !isLoginMode;
+                if(isLoginMode){
+                    authTitle.textContent = 'Hesaba Giriş Yap';
+                    authSubmitBtn.textContent = 'Giriş Yap';
+                    switchAuthBtn.textContent = 'Hesabınız yok mu? Kayıt Ol';
+                } else {
+                    authTitle.textContent = 'Hesap Oluştur';
+                    authSubmitBtn.textContent = 'Kaydol';
+                    switchAuthBtn.textContent = 'Zaten hesabınız var mı? Giriş Yap';
+                }
+                authForm.reset();
+                usernameInput.focus();
+            }
+            switchAuthBtn.addEventListener('click', toggleAuthMode);
+            switchAuthBtn.addEventListener('keydown', e => {
+                if(e.key === 'Enter' || e.key === ' '){
+                    e.preventDefault();
+                    toggleAuthMode();
+                }
+            });
+
+          
+            authForm.addEventListener('submit', e=>{
+                e.preventDefault();
+                clearAuthMessage();
+
+                const username = usernameInput.value.trim();
+                const password = passwordInput.value;
+
+                if(username.length < 3){
+                    setAuthMessage('Kullanıcı adı en az 3 karakter olmalıdır.');
+                    usernameInput.focus();
+                    return;
+                }
+                if(password.length < 4){
+                    setAuthMessage('Şifre en az 4 karakter olmalıdır.');
+                    passwordInput.focus();
+                    return;
+                }
+
+                if(!isLoginMode){
+                    
+                    const exists = Object.keys(usersDB).some(u => u.toLowerCase() === username.toLowerCase());
+                    if(exists){
+                        setAuthMessage('Bu kullanıcı adı zaten mevcut.');
+                        usernameInput.focus();
+                        return;
+                    }
+                    usersDB[username] = password;
+                    saveUsersDB();
+                    loggedInUser = username;
+                    afterLogin();
+                } else {
+                    // Login
+                    const foundUser = Object.keys(usersDB).find(u => u.toLowerCase() === username.toLowerCase());
+                    if(!foundUser || usersDB[foundUser] !== password){
+                        setAuthMessage('Geçersiz kullanıcı adı veya şifre.');
+                        usernameInput.focus();
+                        return;
+                    }
+                    loggedInUser = foundUser;
+                    afterLogin();
+                }
+            });
+
+           
+            function afterLogin(){
+                authScreen.classList.remove('active');
+                welcomeMsg.textContent = `Hoşgeldiniz, ${loggedInUser}!`;
+                welcomeMsg.style.display = 'block';
+                setTimeout(() => {
+                    welcomeMsg.style.display = 'none';
+                    initializeBonanzaGame(); // Start the Bonanza game
+                    gameScreen.classList.add('active'); // Show the game screen
+                }, 2000);
+            }
+
+          
+
+            const bonanzaAnimals = ['🐶','🐱','🐰','🦊','🐻','🐼','🐯','🦁','🐸','🐵'];
+            const bonanzaGridSize = 30; 
+
+            const bonanzaGameBoard = document.getElementById('bonanza-game-board');
+            const bonanzaBalanceStatus = document.getElementById('balanceStatus'); 
+            const bonanzaBetValueEl = document.getElementById('betValue'); 
+            const bonanzaSpinBtn = document.getElementById('spinBtn'); 
+            const bonanzaBetMinus = document.getElementById('betMinus'); 
+            const bonanzaBetPlus = document.getElementById('betPlus'); 
+            const bonanzaAutoSpinBtn = document.getElementById('autoSpinBtn'); 
+            const bonanzaAdBtn = document.getElementById('adBtn'); 
+            const bonanzaLangSelect = document.getElementById('langSelect'); 
+            const bonanzaWinPopup = document.getElementById('winPopup'); 
+            const bonanzaTitle = document.getElementById('bonanza-title'); 
+
+            let bonanzaBalance = 1000;
+            let bonanzaBet = 10;
+            let bonanzaAutoSpin = false;
+            let bonanzaAutoSpinInterval = null;
+            let bonanzaIsSpinning = false;
+
+            function initializeBonanzaGame() {
+               
+                bonanzaGameBoard.innerHTML = ''; 
+                for(let i=0; i<bonanzaGridSize; i++){
+                    const cell = document.createElement('div');
+                    cell.className = 'bonanza-cell'; 
+                    bonanzaGameBoard.appendChild(cell);
+                }
+
+                updateBonanzaTexts();
+                setupBonanzaEventListeners();
+                
+                spinBonanzaGame();
+            }
+
+          
+            function updateBonanzaTexts(){
+                bonanzaBalanceStatus.textContent = `Bakiye: ${bonanzaBalance} ₺`;
+                bonanzaBetValueEl.textContent = `${bonanzaBet} ₺`;
+            }
+
+          
+            function checkBonanzaWin(arr){
+                let won = false;
+                const cells = bonanzaGameBoard.children;
+
+             
+                for(let c of cells){
+                    c.classList.remove('highlight');
+                }
+
+               
+                for(let i=0; i <= arr.length-3; i++){
+                    if(arr[i] === arr[i+1] && arr[i+1] === arr[i+2]){
+                        won = true;
+                       
+                        for(let j=i; j<= i+2; j++){
+                            cells[j].classList.add('highlight');
+                        }
+                    }
+                }
+
+                if(won){
+                    const winAmount = bonanzaBet * 10;
+                    bonanzaBalance += winAmount;
+                    updateBonanzaTexts();
+                    showBonanzaWinPopup(`Kazandınız! +${winAmount} ₺`);
+                }
+            }
+
+            
+            function showBonanzaWinPopup(msg){
+                bonanzaWinPopup.textContent = msg;
+                bonanzaWinPopup.classList.add('show');
+                setTimeout(() => {
+                    bonanzaWinPopup.classList.remove('show');
+                }, 1400);
+            }
+
+           
+            function spinBonanzaGame(){
+                if(bonanzaIsSpinning) return;
+                if(bonanzaBet > bonanzaBalance){
+                    alert('Yetersiz bakiye!');
+                    if(bonanzaAutoSpin) stopBonanzaAutoSpin();
+                    return;
+                }
+                bonanzaIsSpinning = true;
+
+                bonanzaBalance -= bonanzaBet;
+                updateBonanzaTexts();
+
+                bonanzaSpinBtn.disabled = true;
+                bonanzaBetMinus.disabled = true;
+                bonanzaBetPlus.disabled = true;
+                bonanzaAutoSpinBtn.disabled = true;
+                bonanzaAdBtn.disabled = true;
+
+                const cells = bonanzaGameBoard.children;
+                let newAnimals = [];
+                for(let i=0; i<bonanzaGridSize; i++){
+                    const randomAnimal = bonanzaAnimals[Math.floor(Math.random()*bonanzaAnimals.length)];
+                    newAnimals.push(randomAnimal);
+                }
+
+                for(let i=0; i<bonanzaGridSize; i++){
+                    const cell = cells[i];
+                    cell.classList.remove('highlight');
+                    cell.classList.remove('drop');
+                   
+                    setTimeout(() => {
+                        cell.textContent = newAnimals[i];
+                        cell.classList.add('drop');
+                    }, i*30);
+                }
+
+                setTimeout(() => {
+                    checkBonanzaWin(newAnimals);
+                    bonanzaSpinBtn.disabled = false;
+                    bonanzaBetMinus.disabled = false;
+                    bonanzaBetPlus.disabled = false;
+                    bonanzaAutoSpinBtn.disabled = false;
+                    bonanzaAdBtn.disabled = false;
+                    bonanzaIsSpinning = false;
+                }, bonanzaGridSize*30 + 400); 
+            }
+
+           
+            function startBonanzaAutoSpin(){
+                if(bonanzaBalance < bonanzaBet){
+                    alert('Yetersiz bakiye!');
+                    stopBonanzaAutoSpin();
+                    return;
+                }
+                bonanzaAutoSpin = true;
+                bonanzaAutoSpinBtn.classList.add('active');
+                spinBonanzaGame(); 
+                bonanzaAutoSpinInterval = setInterval(() => {
+                    if(bonanzaBalance < bonanzaBet){
+                        stopBonanzaAutoSpin();
+                        return;
+                    }
+                    spinBonanzaGame();
+                }, 1500);
+            }
+
+            function stopBonanzaAutoSpin(){
+                bonanzaAutoSpin = false;
+                bonanzaAutoSpinBtn.classList.remove('active');
+                clearInterval(bonanzaAutoSpinInterval);
+            }
+
+           
+            function setupBonanzaEventListeners() {
+                bonanzaSpinBtn.addEventListener('click', spinBonanzaGame);
+
+                bonanzaAutoSpinBtn.addEventListener('click', () => {
+                    if(bonanzaAutoSpin){
+                        stopBonanzaAutoSpin();
+                    } else {
+                        startBonanzaAutoSpin();
+                    }
+                });
+
+                bonanzaBetMinus.addEventListener('click', () => {
+                    if(bonanzaBet > 10) {
+                        bonanzaBet -= 10;
+                        updateBonanzaTexts();
+                    }
+                });
+
+                bonanzaBetPlus.addEventListener('click', () => {
+                    if(bonanzaBet < 1000){
+                        bonanzaBet += 10;
+                        updateBonanzaTexts();
+                    }
+                });
+
+               
+                bonanzaAdBtn.addEventListener('click', () => {
+                    if(bonanzaAdBtn.classList.contains('loading')) return;
+                    bonanzaAdBtn.classList.add('loading');
+                    bonanzaAdBtn.textContent = 'Yükleniyor...';
+                    setTimeout(() => {
+                        bonanzaBalance += 20;
+                        updateBonanzaTexts();
+                        bonanzaAdBtn.classList.remove('loading');
+                        bonanzaAdBtn.textContent = 'Reklam İzle +20 ₺';
+                    }, 3000);
+                });
+
+                
+                bonanzaLangSelect.addEventListener('change', () => {
+                    const lang = bonanzaLangSelect.value;
+                    const titles = {
+                        tr: 'Hayvan ',
+                        en: 'Animal ',
+                        de: 'Tier',
+                        es: 'Bonanza ',
+                        fr: 'Bonanza'
+                    };
+                    bonanzaTitle.textContent = titles[lang] || 'Hayvan Bonanza';
+                });
+            }
+        })();
+    </script>
+
+</body>
+</html>

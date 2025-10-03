@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h3>Sayı Gir:</h3>
+  <input id="sayi" type="number">
+  <button onclick="k()">Gönder</button>
+  <p id="sonuc"></p>
+  <p id="liste"></p>
+
+  <script>
+    let d = [];
+
+    function k() {
+      let s = +sayi.value;
+      if (isNaN(s)) return;
+      d.push(s);
+      let t = s % 2 ? "Tek" : "Çift", p = s > 0 ? "Pozitif" : s < 0 ? "Negatif" : "Sıfır";
+      sonuc.innerText = `${s}: ${t}, ${p}`;
+      liste.innerText = `Girilenler: ${d.join(", ")} | Toplam: ${d.reduce((a, b) => a + b)}`;
+      sayi.value = "";
+    }
+  </script>
+</body>
+</html>
+	
