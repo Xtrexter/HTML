@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelime Çevirici</title>
+    <style>
+        body {
+            background-color: orange;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        input[type="button"] {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        input[type="button"]:hover {
+            background-color: #0056b3;
+        }
+        h3 {
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>İngilizce - Türkçe Çevirici</h1>
+        <input type="text" id="arananKelime" placeholder="İngilizce Kelime">
+        <input type="button" value="Çevir" onclick="cevir()">
+        <h3 id="turkce">Kelimenin Türkçe Karşılığı</h3>
+    </div>
+
+    <script>
+        const ingilizce = ["apple", "bottle", "computer", "book", "mouse", "arasaktaş", "wall", "pen", "paper", "table"];
+        const turkce = ["elma", "şişe", "bilgisayar", "kitap", "fare", "bıyıklı fare", "duvar", "kalem", "kağıt", "masa"];
+
+        function cevir() {
+            const kelime = document.getElementById("arananKelime").value.trim().toLowerCase();
+            const siraNo = ingilizce.findIndex(k => k.toLowerCase() === kelime);
+            const sonucElement = document.getElementById("turkce");
+
+            if (siraNo >= 0) {
+                sonucElement.innerText = turkce[siraNo];
+            } else {
+                alert("Kelime bulunamadı.");
+                sonucElement.innerText = "Kelimenin Türkçe Karşılığı";
+            }
+        }
+    </script>
+</body>
+</html>

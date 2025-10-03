@@ -1,0 +1,33 @@
+div{
+ margin:auto;
+ margin-top:20px;
+ height:auto;
+ width:500px;
+ color:forestgreen;
+ border:2px solid black;
+ padding:25px;
+ background:honeydew;
+ }
+ 
+ <style>
+ div{
+ margin:auto;
+ margin-top:20px;
+ height:auto;
+ width:500px;
+ color:white;
+ border:2px solid black;
+ padding:25px;
+ background:red;
+ text-align:center;
+ margin-left:50px;
+ }
+ a{
+ color:white;
+ }
+ a:hover{
+ color:white;
+ text-decoration:none;
+
+ }
+ </style>

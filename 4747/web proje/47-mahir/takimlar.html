@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Takımlar ve Oyuncular - GGO Futbol</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f5f5, #e0e0e0); /* Geçişli renkler */
+            font-family: 'Arial', sans-serif;
+        }
+
+        header {
+            background-color: #343a40;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ff6347 !important; /* Tomato color for brand */
+        }
+
+        .navbar-nav .nav-link {
+            color: #ffffff !important;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #ff6347 !important;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #6a5acd, #32cd32); /* Mor ve yeşil geçişi */
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            margin-bottom: 20px;
+            height: 100%; /* Kart boyutlarını eşitler */
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, #ff6347, #ff4500); /* Kırmızı-turuncu geçişi hover sırasında */
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+
+        .card-body p {
+            font-size: 1.1rem;
+            color: #f0f0f0; /* Yazılar için açık renk */
+            line-height: 1.6;
+        }
+
+        .card-body p strong {
+            color: #ff6347; /* Öne çıkan karakter isimleri için kırmızı renk */
+        }
+
+        footer {
+            background-color: #343a40;
+            color: #fff;
+            padding: 20px;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .container {
+            max-width: 1100px;
+        }
+
+        /* Flexbox düzenleme */
+        .team-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .team-card {
+            flex: 0 0 calc(33.333% - 20px); /* 3 kartlı düzen */
+            max-width: calc(33.333% - 20px);
+            display: flex;
+            flex-direction: column; /* Kartın içeriklerini dikey yönde hizala */
+        }
+
+        .team-card .card-body {
+            flex-grow: 1; /* İçeriğin esnek büyümesine izin ver */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* İçeriği eşit şekilde dağıt */
+        }
+
+        @media (max-width: 768px) {
+            .team-card {
+                flex: 0 0 calc(50% - 20px); /* 2 kartlı düzen tablet ekranları için */
+                max-width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .team-card {
+                flex: 0 0 100%; /* Tek kartlı düzen mobil ekranlar için */
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        
+        <a class="navbar-brand" href="index.html">
+            <img src="resimler/ggofutbol_logo.jpg" alt="GGO Futbol Logo" style="max-height: 90px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Hakkında</a></li>
+                <li class="nav-item"><a class="nav-link" href="karakterler.html">Karakterler</a></li>
+                <li class="nav-item"><a class="nav-link" href="takimlar.html">Takımlar</a></li>
+                <li class="nav-item"><a class="nav-link" href="teknikler.html">Teknikler</a></li>
+				<li class="nav-item"><a class="nav-link" href="iletisim.html">İletişim</a></li>
+               
+            </ul>
+        </div>
+    </div>
+</header>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Takımlar ve Oyuncular</h1>
+
+      
+        <div class="team-cards">
+           
+            <div class="team-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Barefoot Takımı</h2>
+                        <img src="resimler/barefoot-logo.jpg" class="img-fluid" alt="Barefoot Logo">
+                        <p>Barefoot, özgür ruhlu ve enerjik bir takım. Her zaman cesur hareketler yapmayı severler ve rakiplerini şaşırtmak için yaratıcı stratejiler kullanırlar.</p>
+                        <h4>Takım Oyuncuları:</h4>
+                        <ul>
+                            <li><strong>Isaac:</strong> Takım lideri, stratejik düşünme yeteneğiyle tanınır.</li>
+                            <li><strong>Shawn:</strong> Savunma oyuncusu, hızlı ve kararlı.</li>
+                            <li><strong>Karl:</strong> Kanat oyuncusu, her zaman rakipleri geçme konusunda ustadır.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+           
+            <div class="team-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Beats Takımı</h2>
+                        <img src="resimler/beats-logo.jpg" class="img-fluid" alt="Beats Logo">
+                        <p>Beats, ritmik ve akıcı oyunlarıyla dikkat çeker. Topla dans eder gibi hareket ederler ve her zaman takım oyunu oynamayı tercih ederler.</p>
+                        <h4>Takım Oyuncuları:</h4>
+                        <ul>
+                            <li><strong>Timmy:</strong> Zeki oyuncu, rakiplerin hareketlerini öngörme yeteneği ile ünlüdür.</li>
+                            <li><strong>Shadow:</strong> Hızlı ve çevik, rakiplerinin hatalarından yararlanarak gol atar.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+          
+            <div class="team-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">The Name of Devils Takımı</h2>
+                        <img src="resimler/name-of-devils-logo.jpg" class="img-fluid" alt="The Name of Devils Logo">
+                        <p>Bu takım, strateji ve güç birleştirerek oyunlarını domine eder. Onlar için her şey bir meydan okumadır.</p>
+                        <h4>Takım Oyuncuları:</h4>
+                        <ul>
+                            <li><strong>Myth:</strong> Efsanevi bir oyuncu, her zaman beklenmedik anlarda yeteneklerini sergiler.</li>
+                            <li><strong>Darkness:</strong> Takımın en sert oyuncusu, savunmadaki başarısıyla tanınır.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="team-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Steel Warriors Takımı</h2>
+                        <img src="resimler/steel-warriors-logo.jpg" class="img-fluid" alt="Steel Warriors Logo">
+                        <p>Steel Warriors, güçlü bir savunma hattına sahip ve oyunlarındaki disipliniyle tanınırlar. Her zaman kuralına uygun oynarlar.</p>
+                        <h4>Takım Oyuncuları:</h4>
+                        <ul>
+                            <li><strong>Falcon:</strong> Hızlı ve güçlü, her zaman rakiplerine karşı etkili.</li>
+                            <li><strong>Rex:</strong> Savunma oyuncusu, takımının kalesini korumakta ustadır.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+           
+            <div class="team-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Thunder Strike Takımı</h2>
+                        <img src="resimler/thunder-strike-logo.jpg" class="img-fluid" alt="Thunder Strike Logo">
+                        <p>Thunder Strike, hız ve güç birleşimi ile rakiplerini alt ederler. Oyuncuları, rakiplerinin zayıf noktalarını hızlıca bulurlar.</p>
+                        <h4>Takım Oyuncuları:</h4>
+                        <ul>
+                            <li><strong>Storm:</strong> Hızlı bir hücum oyuncusu, savunmayı geçmede ustadır.</li>
+                            <li><strong>Viper:</strong> Savunma hattındaki tekniğiyle dikkat çeker.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+          
+            <div class="team-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Iron Titans Takımı</h2>
+                        <img src="resimler/iron-titans-logo.jpg" class="img-fluid" alt="Iron Titans Logo">
+                        <p>Iron Titans, gücün ve stratejinin birleştiği bir takım. Her zaman dikkatli bir şekilde hareket eder ve rakiplerini stratejik hamlelerle alt ederler.</p>
+                        <h4>Takım Oyuncuları:</h4>
+                        <ul>
+                            <li><strong>Titan:</strong> Takımın lideri, her durumu soğukkanlılıkla değerlendirir ve rakiplerinin zayıf noktalarını bulur.</li>
+                            <li><strong>Berserker:</strong> Savunmanın sert oyuncusu, rakiplerinin hiçbir hamlesine izin vermez.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <p>&copy; 2025 GGO Futbol. Tüm Hakları Saklıdır.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

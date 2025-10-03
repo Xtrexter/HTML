@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Uygulaması</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <style>
+        span {
+            width: 50px; 
+            height: 50px; 
+            background-color: white;
+            margin-right: 10px;
+            display: inline-block;
+            font-size: 20px;
+            color: darkslateblue; 
+            text-align: center; 
+        }
+        input {
+            width: 240px;
+            margin-top: 3px; 
+        }
+    </style>
+</head>
+<body style="background-color: darkslateblue;color:white">
+    <div id="cerceve">
+        <span id="kutu1">Kutu <br> 1</span>
+        <span id="kutu2">Kutu <br>2</span>
+        <span id="kutu3">Kutu <br> 3</span>
+        <span id="kutu4"><b>Kutu <br>4</b></span>
+    </div>
+    <br>
+    <input type="button" id="islem1" value="Tüm Kutuları Boya"><br>
+    <input type="button" id="islem2" value="Kutu 2’den Önce Ekle"><br>
+    <input type="button" id="islem3" value="Kutu 2’den Sonra Ekle"><br>
+    <input type="button" id="islem4" value="Tüm Kutuların Önüne Ekle"><br>
+    <input type="button" id="islem5" value="Tüm Kutuların Sonuna Ekle"><br>
+    <input type="button" id="islem6" value="Kutu 4’ün İçini Boşalt"><br>
+    <input type="button" id="islem7" value="Kutu 4’ü Kaldır"><br>
+    <script>
+        $(document).ready(function() {
+            $("#islem1").click(function() {
+                $("span").css({"backgroundColor": "tomato", "color": "white"});
+            });
+
+            $("#islem2").click(function() {
+                $("#kutu2").before("<span><u>Yeni<br>Kutu</u></span>");
+            });
+
+            $("#islem3").click(function() {
+                $("#kutu2").after("<span><u>Yeni<br>Kutu</u></span>");
+            });
+
+            $("#islem4").click(function() {
+                $("#cerceve").prepend("<span><u>Yeni<br>Kutu</u></span>");
+            });
+
+            $("#islem5").click(function() {
+                $("#cerceve").append("<span><u>Yeni<br>Kutu</u></span>");
+            });
+
+            $("#islem6").click(function() {
+                $("#kutu4").empty();
+            });
+
+            $("#islem7").click(function() {
+                $("#kutu4").remove();
+            });
+        });
+    </script>
+</body>
+</html>
