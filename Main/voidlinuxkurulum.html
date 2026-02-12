@@ -1,0 +1,509 @@
+                <div class="step">
+                    <h4>Source (Kaynak)</h4>
+                    <div style="text-align: center; margin: 20px 0;">
+       <!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Void Linux Kurulum Rehberi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .warning {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #c23616;
+        }
+
+        .warning h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .section {
+            margin: 40px 0;
+            padding: 30px;
+            border-radius: 15px;
+            background: rgba(102, 126, 234, 0.05);
+            border-left: 5px solid #667eea;
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .section h3 {
+            color: #764ba2;
+            font-size: 1.5rem;
+            margin: 25px 0 15px 0;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .code {
+            background: #2d3748;
+            color: #68d391;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .step {
+            background: white;
+            margin: 20px 0;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #48bb78;
+        }
+
+        .step h4 {
+            color: #48bb78;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .image-placeholder {
+            background: #f7fafc;
+            border: 2px dashed #cbd5e0;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            color: #718096;
+        }
+
+        .download-section {
+            background: linear-gradient(45deg, #48bb78, #38a169);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .download-section a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 15px;
+            transition: background 0.3s ease;
+        }
+
+        .download-section a:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .partition-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .partition-table th,
+        .partition-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .partition-table th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        .partition-table tr:hover {
+            background: #f8f9ff;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .header,
+            .content {
+                padding: 20px;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+     <nav>
+    <a href="index.html">Ana Sayfa</a>
+    <a href="kolay-dagitimlar.html">Kolay Dağıtımlar</a>
+    <a href="orta-seviye.html">Orta Seviye</a>
+    <a href="zor-dagitimlar.html">Zor Dağıtımlar</a>
+    <a href="destek.html">Destek</a>
+    <a href="onerilendagitimlar.html">Önerilen Dağıtımlar</a>
+	<a href="voidlinuxkurulum.html">Void Linux Kurulum Rehberim</a>
+  </nav>
+    <div class="container">
+        <div class="header">
+            <h1>🐧 Void Linux Kurulum Rehberi</h1>
+            <p>Hızlı, hafif ve minimalist Linux deneyimi</p>
+        </div>
+
+        <div class="content">
+            <div class="warning">
+                <h3>⚠ Önemli Uyarı</h3>
+                <p>Bu rehberdeki anlatılanlar Linux'a yeni başlayanlar için uygun değildir. Denemek isteyenler mutlaka <strong>Sanal Makine</strong> üzerinden kullanmalıdır.</p>
+            </div>
+
+            <div class="section">
+                <h2> Void Linux Nedir?</h2>
+                <div style="text-align: center; margin: 20px 0;">
+                    <img src=https://www.technopat.net/sosyal/data/attachments/2498/2498885-7fa174a92f79199d3b8f0ae7d0769118.jpg>                                                 
+                <p>Void Linux, bağımsız olarak geliştirilen, hızlı, hafif ve minimalist bir GNU/Linux dağıtımıdır. Geleneksel init sistemleri yerine runit kullanarak son derece hızlı açılış süreleri sunar. Paket yöneticisi olarak XBPS (X Binary Package System) kullanır ve rolling release modelini takip eder.
+                <h3> Neden Void Linux Kullanılır?</h3>
+                <div class="features">
+                    <div class="feature">
+                        <h4>⚡ Hızlı ve Hafif</h4>
+                        <p>Runit sayesinde sistem çok hızlı açılır ve kapanır.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>🔓 Bağımsız Geliştirme</h4>
+                        <p>Debian veya Arch gibi başka dağıtımlara bağlı değildir.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>📦 XBPS Paket Yöneticisi</h4>
+                        <p>Hızlı ve esnek bir paket yönetimi sunar.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>🔧 Glibc ve Musl Desteği</h4>
+                        <p>Varsayılan olarak glibc ile gelse de musl sürümü ile daha hafif sistem kurma imkanı.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>🚫 Systemd Yok</h4>
+                        <p>Systemd istemiyorsanız, Void Linux en iyi alternatiflerden biri.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="download-section">
+                <h2>📥 ISO Dosyasını İndirme</h2>
+                <p>ISO dosyasını resmi siteden indirin</p>
+                <a href="https://voidlinux.org/download/" target="_blank">Enter the void - Downloads</a>
+            </div>
+
+            <div class="section">
+                <h2> ISO Seçenekleri</h2>
+                <div class="image-placeholder">
+                   <img src=
+                </div>
+                <p>Normal bir bilgisayar için <strong>x86_64</strong> kısmından indireceğiz. Eğer minimal kurulum yapılacaksa <strong>base</strong> seçilebilir ama arayüz ile kurmak isterseniz <strong>XFCE</strong> tavsiyemdir.</p>
+
+                <h3> Glibc vs Musl</h3>
+                <div class="features">
+                    <div class="feature">
+                        <h4>Glibc (GNU C Library)</h4>
+                        <p>Çoğu Linux dağıtımında kullanılan standart kütüphane. Daha fazla program uyumluluğu sağlar, geniş bir ekosisteme sahiptir. Ancak musl'a göre biraz daha büyük ve ağırdır.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>Musl</h4>
+                        <p>Daha hafif, minimalist ve güvenlik odaklı alternatif. Küçük sistemler ve düşük kaynak tüketen sistemler için ideal. Bazı yazılımlar için ekstra uğraş gerekebilir.</p>
+                    </div>
+                </div>
+                <p><strong>Bu rehberde Glibc XFCE ISO dosyası ile devam edeceğiz.</strong></p>
+            </div>
+
+            <div class="section">
+                <h2>💾 USB'ye Yazdırma</h2>
+                <p>ISO'yu USB'ye yazdırmak için <strong>Balena Etcher</strong> kullanın.</p>
+                <a href="https://www.balena.io/etcher/" target="_blank" style="color: #667eea;">balenaEtcher - Flash OS images to SD cards & USB drives</a>
+            </div>
+
+            <div class="section">
+                <h2> Kuruluma Başlama</h2>
+                <div class="image-placeholder">
+                    <img src="https://www.technopat.net/sosyal/eklenti/1743087274779-png.2455230/" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);" alt="Source Selection">
+                </div>
+                <p>Bu ekranda ilk seçenek ile devam edin. Ama siyah ekranda kalıyorsa 3. seçenekteki <strong>"Graphics Disabled"</strong> olanı seçebilirsiniz.</p>
+
+                <div class="step">
+                    <h4> Root Hesabına Geçme</h4>
+                    <p>XFCE masaüstü ortamı geldiğinde terminal'i açın.</p>
+                    <div class="code">sudo su</div>
+                    <p>Eğer normal hesap ile devam edecekseniz VoidLinux'un Live şifresi: <strong>"voidlinux"</strong></p>
+                </div>
+
+                <div class="step">
+                    <h4> Kurulumu Başlatma</h4>
+                    <p>Terminal'e şunu yazarak kuruluma geçin:</p>
+                    <div class="code">void-installer</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Kurulum Adımları</h2>
+                
+                <div class="step">
+                    <h4>Keyboard (Klavye)</h4>
+                    <div class="image-placeholder">
+                        <img src="https://www.technopat.net/sosyal/eklenti/1743087740171-png.2455233" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);" alt="Source Selection">
+                    </div>
+                    <p>Aşağıya inerek istediğiniz klavye düzenini seçin. <strong>Türkçe Q Klavye</strong> için <strong>trq</strong> yazanı seçin.</p>
+                </div>
+
+                <div class="step">
+                    <h4>Network (Ağ)</h4>
+                    <p>Bağlantı durumunu gösterir. Çalışıp çalışmadığını kontrol edip "Tamam" diyerek geçin.</p>
+                </div>
+
+                <div class="step">
+                    <h4>Source (Kaynak)</h4>
+                    <div class="image-placeholder">
+                        <img src="https://www.technopat.net/sosyal/eklenti/1743087957166-png.2455234/" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);" alt="Source Selection">
+                    </div>
+                    <div class="features">
+                        <div class="feature">
+                            <h4>Local</h4>
+                            <p>ISO'nun içindeki paketleri ana sisteme yükler. İnternetiniz kısıtlı ise kullanılabilir.</p>
+                        </div>
+                        <div class="feature">
+                            <h4>Network (Önerilen)</h4>
+                            <p>Paketleri ağ üzerinden yükler. Tüm paketler güncel gelir.</p>
+                        </div>
+                    </div>
+                    <p><strong>Bu rehberde Network (Ağ üzerinden kurulum) yapacağız.</strong></p>
+                </div>
+
+                <div class="step">
+                    <h4> Mirror (Yansı)</h4>
+                    <div class="image-placeholder">
+                        <img src="https://www.technopat.net/sosyal/eklenti/1743088293888-png.2455236/" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);" alt="Source Selection">
+                    </div>
+                    <p>Size en yakın yansıyı seçmek çok önemlidir. EU/Finland yada EU/Turkey gibi yakın bir sunucu seçebilirsiniz.</p>
+                </div>
+
+                <div class="step">
+                    <h4>Temel Ayarlar</h4>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>Hostname:</strong> Sisteme vereceğiniz isim</li>
+                        <li><strong>Timezone:</strong> Türkiye için Europe/Istanbul</li>
+                        <li><strong>Root Password:</strong> Root şifrenizi belirleyin</li>
+                        <li><strong>User Account:</strong> Kullanıcı hesabınızı oluşturun</li>
+                    </ul>
+                </div>
+
+                <div class="step">
+                    <h4> Bootloader (Önyükleyici)</h4>
+                    <div class="image-placeholder">
+                        <img src="https://www.technopat.net/sosyal/eklenti/1743088611534-png.2455240/" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);" alt="Source Selection">
+                    </div>
+                    <p>VoidLinux'u kuracağınız disk/bölümü seçin. "Use Graphical Terminal For Bootloader" sorusuna <strong>yes</strong> deyin.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Disk Bölümlendirme</h2>
+                
+                <div class="step">
+                    <h4>🔨 Partition Aracı Seçimi</h4>
+                    <p><strong>cfdisk</strong> hem kolay hem kullanışlıdır. cfdisk'i seçin.</p>
+                    <div class="image-placeholder">
+                        <img src="https://www.technopat.net/sosyal/eklenti/1743089006957-png.2455248/" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);" alt="Source Selection">
+                    </div>
+                    <p>UEFI sisteme kurmak için <strong>GPT</strong> seçin.</p>
+                </div>
+
+                <div class="step">
+                    <h4>Bölüm Planı</h4>
+                    <p>3 adet alan ayıracağız:</p>
+                    <table class="partition-table">
+                        <thead>
+                            <tr>
+                                <th>Bölüm</th>
+                                <th>Boyut</th>
+                                <th>Tip</th>
+                                <th>Mount Point</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>EFI (BOOT)</td>
+                                <td>512M</td>
+                                <td>EFI System</td>
+                                <td>/boot/efi</td>
+                            </tr>
+                            <tr>
+                                <td>SWAP</td>
+                                <td>2GB (RAM'e göre)</td>
+                                <td>Linux Swap</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>ROOT (/)</td>
+                                <td>Kalan alan</td>
+                                <td>Linux filesystem</td>
+                                <td>/</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="step">
+                    <h4>➕ Bölüm Oluşturma</h4>
+                    <div class="image-placeholder">
+                        <img src="https://www.technopat.net/sosyal/eklenti/1743089376741-png.2455256/" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);" alt="Source Selection">
+                    </div>
+                    <ol style="margin-left: 20px;">
+                        <li>Alt kısımda <strong>New</strong>'e basın</li>
+                        <li>EFI için <strong>512M</strong> yazın</li>
+                        <li>Free Space'e tıklayıp SWAP için <strong>2G</strong> yazın</li>
+                        <li>Kalan alanı ROOT için ayırın (otomatik)</li>
+                    </ol>
+                </div>
+
+                <div class="step">
+                    <h4>🏷️ Bölüm Tiplerini Ayarlama</h4>
+                    <div class="image-placeholder">
+                        <img src="https://www.technopat.net/sosyal/eklenti/1743089437033-png.2455257" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);" alt="Source Selection">
+                    </div>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>/dev/sda1 (EFI):</strong> EFI System</li>
+                        <li><strong>/dev/sda2 (SWAP):</strong> Linux Swap</li>
+                        <li><strong>/dev/sda3 (ROOT):</strong> Linux filesystem</li>
+                    </ul>
+                    <div class="image-placeholder">
+                        <img src="https://www.technopat.net/sosyal/eklenti/1743089524459-png.2455261/" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);" alt="Source Selection">
+                    </div>
+                    <p>Son halinde <strong>Write</strong> ile kaydedin ve <strong>Quit</strong> ile çıkın.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Dosya Sistemi Oluşturma</h2>
+                
+                <div class="step">
+                    <h4>FileSystem Ayarları</h4>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>EFI (/dev/sda1):</strong> vfat (FAT32) → Mount: /boot/efi</li>
+                        <li><strong>SWAP (/dev/sda2):</strong> Linux Swap</li>
+                        <li><strong>ROOT (/dev/sda3):</strong> btrfs veya ext4 → Mount: /</li>
+                    </ul>
+                    <p>Her dosya sistemi oluşturması için gelen soruya <strong>evet</strong> deyin.</p>
+                </div>
+
+                <div class="step">
+                    <h4>Kurulumu Tamamlama</h4>
+                    <p><strong>INSTALL</strong> seçeneğine tıklayarak kurulumu başlatın. İndirme ve kurulum tamamlandığında <strong>OK</strong> diyerek işlemi bitirin.</p>
+                </div>
+            </div>
+
+            <div class="warning">
+                <h3>Tebrikler.</h3>
+                <p>Void Linux kurulumu tamamlandı! Sistemi yeniden başlattığınızda yeni Void Linux kurulumunuz sizi karşılayacak.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
