@@ -1,0 +1,2505 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linux Rehberleri – Türkçe Linux Eğitim Merkezi</title>
+<meta name="description" content="Türkçe Linux rehberleri, komut satırı eğitimleri, sunucu yönetimi, ağ güvenliği ve daha fazlası. Yeni başlayanlardan uzmanlara kadar herkes için.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-dark: #0a0e1a;
+    --bg-card: #0f1525;
+    --bg-nav: rgba(10,14,26,0.97);
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --accent4: #f59e0b;
+    --text-main: #e2e8f0;
+    --text-muted: #64748b;
+    --text-dim: #94a3b8;
+    --border: rgba(0,212,255,0.15);
+    --glow: 0 0 20px rgba(0,212,255,0.3);
+    --font-head: 'Sora', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg-dark);
+    color: var(--text-main);
+    font-family: var(--font-head);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-dark); }
+  ::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 3px; }
+
+  /* ─── NAVBAR ─── */
+  #navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    background: var(--bg-nav);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .logo-icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 16px;
+    color: #fff;
+  }
+
+  .logo-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.5px;
+  }
+
+  .logo-text span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+
+  .nav-links a:hover {
+    color: var(--accent);
+    background: rgba(0,212,255,0.08);
+  }
+
+  .nav-cta {
+    background: linear-gradient(135deg, var(--accent), var(--accent2)) !important;
+    color: #fff !important;
+    padding: 8px 18px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+  }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--text-dim);
+    transition: 0.3s;
+  }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 100px 24px 60px;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 50%, rgba(0,212,255,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 60% at 80% 30%, rgba(124,58,237,0.07) 0%, transparent 60%);
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  }
+
+  .hero-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.3);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .hero-badge-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.5); }
+  }
+
+  .hero-title {
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -2px;
+    margin-bottom: 20px;
+  }
+
+  .hero-title .line1 { display: block; color: var(--text-main); }
+  .hero-title .line2 {
+    display: block;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    color: var(--text-dim);
+    margin-bottom: 36px;
+    max-width: 480px;
+    line-height: 1.8;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 4px 24px rgba(0,212,255,0.25);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,212,255,0.4);
+  }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    background: rgba(255,255,255,0.03);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,212,255,0.06);
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    margin-top: 48px;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat-val {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    display: block;
+  }
+
+  .hero-stat-lbl {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  /* Terminal */
+  .terminal-window {
+    background: #0d1117;
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5), var(--glow);
+  }
+
+  .terminal-header {
+    background: #161b22;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .t-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+  }
+
+  .t-dot.red { background: #ff5f56; }
+  .t-dot.yellow { background: #ffbd2e; }
+  .t-dot.green { background: #27c93f; }
+
+  .terminal-title {
+    margin-left: 8px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .terminal-body {
+    padding: 24px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.9;
+  }
+
+  .t-prompt { color: var(--accent3); }
+  .t-cmd { color: var(--text-main); }
+  .t-output { color: var(--text-muted); padding-left: 0; }
+  .t-comment { color: #4a5568; }
+  .t-success { color: var(--accent3); }
+  .t-error { color: #f87171; }
+  .t-warn { color: var(--accent4); }
+  .t-accent { color: var(--accent); }
+  .t-purple { color: var(--accent2); }
+
+  .cursor {
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--accent);
+    margin-left: 2px;
+    vertical-align: middle;
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+
+  /* ─── SECTION BASE ─── */
+  .section {
+    padding: 100px 24px;
+  }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .section-head {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+
+  .section-label {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+
+  .section-title {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    color: var(--text-main);
+  }
+
+  .section-sub {
+    font-size: 17px;
+    color: var(--text-dim);
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* ─── CATEGORIES ─── */
+  #categories { background: var(--bg-card); }
+
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .cat-card {
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    transition: all 0.3s;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+
+  .cat-card:hover {
+    border-color: rgba(0,212,255,0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+
+  .cat-card:hover::before { transform: scaleX(1); }
+
+  .cat-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+
+  .cat-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 8px;
+  }
+
+  .cat-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .cat-count {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ─── GUIDES GRID ─── */
+  .guides-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+  }
+
+  .guide-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .guide-card:hover {
+    border-color: rgba(0,212,255,0.35);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.35);
+  }
+
+  .guide-thumb {
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    position: relative;
+    overflow: hidden;
+    padding: 20px;
+  }
+
+  .guide-thumb-code {
+    color: var(--accent3);
+    font-size: 11px;
+    line-height: 1.7;
+    width: 100%;
+    white-space: pre;
+    overflow: hidden;
+  }
+
+  .guide-body { padding: 24px; flex: 1; }
+
+  .guide-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .tag-green { background: rgba(16,185,129,0.15); color: var(--accent3); }
+  .tag-blue { background: rgba(0,212,255,0.12); color: var(--accent); }
+  .tag-purple { background: rgba(124,58,237,0.15); color: #a78bfa; }
+  .tag-yellow { background: rgba(245,158,11,0.15); color: var(--accent4); }
+  .tag-red { background: rgba(239,68,68,0.15); color: #f87171; }
+
+  .guide-difficulty {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-left: auto;
+  }
+
+  .guide-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  .guide-excerpt {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .guide-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .guide-author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .author-avatar {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .guide-read-time {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+  }
+
+  /* ─── FULL ARTICLE SECTION ─── */
+  #article {
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .article-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .article-content h2 {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-main);
+    margin: 40px 0 16px;
+    letter-spacing: -0.5px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .article-content h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 28px 0 12px;
+  }
+
+  .article-content p {
+    font-size: 15px;
+    color: var(--text-dim);
+    line-height: 1.9;
+    margin-bottom: 18px;
+  }
+
+  .article-content strong { color: var(--text-main); }
+
+  .code-block {
+    background: #0d1117;
+    border: 1px solid rgba(0,212,255,0.15);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+
+  .code-header {
+    background: #161b22;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .code-lang {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .code-copy {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    background: none;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 2px 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .code-copy:hover { border-color: var(--accent); color: var(--accent); }
+
+  .code-body {
+    padding: 20px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.8;
+    overflow-x: auto;
+    counter-reset: line;
+  }
+
+  .code-body .line { display: block; white-space: pre; }
+
+  .info-box {
+    border-left: 3px solid var(--accent);
+    background: rgba(0,212,255,0.06);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+  }
+
+  .info-box.warning { border-color: var(--accent4); background: rgba(245,158,11,0.06); }
+  .info-box.success { border-color: var(--accent3); background: rgba(16,185,129,0.06); }
+  .info-box.danger { border-color: #f87171; background: rgba(239,68,68,0.06); }
+
+  .info-box-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    color: var(--accent);
+  }
+
+  .info-box.warning .info-box-title { color: var(--accent4); }
+  .info-box.success .info-box-title { color: var(--accent3); }
+  .info-box.danger .info-box-title { color: #f87171; }
+
+  .info-box p {
+    font-size: 14px;
+    color: var(--text-dim);
+    margin: 0;
+  }
+
+  /* Sidebar */
+  .sidebar { position: sticky; top: 80px; }
+
+  .sidebar-widget {
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .widget-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .toc-list { list-style: none; }
+
+  .toc-list li {
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .toc-list a {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .toc-list a::before {
+    content: '▸';
+    font-size: 10px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .toc-list a:hover { color: var(--accent); }
+
+  .recent-list { list-style: none; }
+
+  .recent-item {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .recent-item:last-child { border-bottom: none; }
+
+  .recent-icon {
+    width: 36px; height: 36px;
+    background: rgba(0,212,255,0.08);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 16px;
+  }
+
+  .recent-info { flex: 1; }
+
+  .recent-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+    display: block;
+    margin-bottom: 3px;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .recent-title:hover { color: var(--accent); }
+  .recent-date { font-size: 11px; color: var(--text-muted); }
+
+  /* ─── COMMANDS TABLE ─── */
+  #commands { background: var(--bg-dark); }
+
+  .cmd-table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead tr { background: #161b22; }
+
+  th {
+    padding: 14px 20px;
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 13px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--text-dim);
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  tr:hover td { background: rgba(0,212,255,0.03); }
+
+  td:first-child {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    white-space: nowrap;
+    font-size: 12px;
+  }
+
+  td strong { color: var(--text-main); font-weight: 600; }
+
+  /* ─── DISTROS ─── */
+  #distros { background: var(--bg-card); }
+
+  .distro-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+  }
+
+  .distro-card {
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    transition: all 0.3s;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+  }
+
+  .distro-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0,212,255,0.4);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+
+  .distro-logo {
+    width: 60px; height: 60px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+  }
+
+  .distro-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 6px;
+  }
+
+  .distro-use {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+
+  .distro-rating {
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+  }
+
+  .star { color: var(--accent4); font-size: 13px; }
+
+  /* ─── TIPS ─── */
+  #tips { background: var(--bg-dark); }
+
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .tip-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tip-card::after {
+    content: attr(data-num);
+    position: absolute;
+    top: -10px; right: 16px;
+    font-size: 80px;
+    font-weight: 900;
+    color: rgba(0,212,255,0.04);
+    font-family: var(--font-mono);
+    pointer-events: none;
+  }
+
+  .tip-card:hover { border-color: rgba(0,212,255,0.3); }
+
+  .tip-icon { font-size: 28px; margin-bottom: 14px; }
+
+  .tip-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 10px;
+  }
+
+  .tip-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .tip-cmd {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: var(--accent3);
+  }
+
+  /* ─── NEWSLETTER ─── */
+  #newsletter {
+    background: linear-gradient(135deg, #0a0e1a 0%, #0f0820 50%, #0a1a12 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  #newsletter::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .newsletter-inner {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .newsletter-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .newsletter-form {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+
+  .newsletter-input {
+    flex: 1;
+    min-width: 200px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-family: var(--font-head);
+    font-size: 14px;
+    color: var(--text-main);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .newsletter-input::placeholder { color: var(--text-muted); }
+  .newsletter-input:focus { border-color: var(--accent); }
+
+  .newsletter-btn {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 28px;
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
+
+  .newsletter-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,212,255,0.3); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #060810;
+    border-top: 1px solid var(--border);
+    padding: 60px 24px 32px;
+  }
+
+  .footer-grid {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 48px;
+  }
+
+  .footer-brand p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-top: 16px;
+    max-width: 300px;
+  }
+
+  .footer-col-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+  }
+
+  .footer-links { list-style: none; }
+
+  .footer-links li { margin-bottom: 10px; }
+
+  .footer-links a {
+    font-size: 14px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--accent); }
+
+  .footer-bottom {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: gap;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .footer-bottom p {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .footer-bottom span { color: var(--accent); }
+
+  .social-links {
+    display: flex;
+    gap: 12px;
+  }
+
+  .social-link {
+    width: 34px; height: 34px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    text-decoration: none;
+    transition: all 0.2s;
+    color: var(--text-muted);
+  }
+
+  .social-link:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,212,255,0.06); }
+
+  /* ─── PROGRESS BAR ─── */
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    z-index: 9000;
+    width: 0%;
+    transition: width 0.1s;
+  }
+
+  /* ─── BACK TO TOP ─── */
+  #back-top {
+    position: fixed;
+    bottom: 28px; right: 28px;
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 500;
+    box-shadow: 0 4px 20px rgba(0,212,255,0.4);
+    transition: transform 0.2s;
+  }
+
+  #back-top:hover { transform: translateY(-3px); }
+
+  /* ─── MOBILE NAV ─── */
+  #mobile-menu {
+    display: none;
+    position: fixed;
+    top: 64px; left: 0; right: 0;
+    background: var(--bg-nav);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    z-index: 999;
+  }
+
+  #mobile-menu a {
+    display: block;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 12px 0;
+    font-size: 15px;
+    font-weight: 500;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: color 0.2s;
+  }
+
+  #mobile-menu a:hover { color: var(--accent); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1024px) {
+    .hero-content { grid-template-columns: 1fr; }
+    .terminal-window { display: none; }
+    .article-layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .hero-title { letter-spacing: -1px; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .guides-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ─── ANIMATIONS ─── */
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s, transform 0.6s; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  .stagger-1 { transition-delay: 0.1s; }
+  .stagger-2 { transition-delay: 0.2s; }
+  .stagger-3 { transition-delay: 0.3s; }
+  .stagger-4 { transition-delay: 0.4s; }
+
+  /* ─── SEARCH BAR ─── */
+  .search-wrap {
+    max-width: 560px;
+    margin: 0 auto 48px;
+    position: relative;
+  }
+
+  .search-input {
+    width: 100%;
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 50px 14px 20px;
+    font-family: var(--font-head);
+    font-size: 15px;
+    color: var(--text-main);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .search-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0,212,255,0.1);
+  }
+
+  .search-icon {
+    position: absolute;
+    right: 16px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 18px;
+  }
+
+  /* ─── BREADCRUMB ─── */
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+
+  .breadcrumb a { color: var(--accent); text-decoration: none; }
+  .breadcrumb span { color: var(--text-muted); }
+
+  /* ─── FEATURED POST ─── */
+  .featured-post {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin-bottom: 48px;
+    transition: all 0.3s;
+  }
+
+  .featured-post:hover {
+    border-color: rgba(0,212,255,0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 48px rgba(0,0,0,0.3);
+  }
+
+  .featured-visual {
+    background: #0d1117;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    border-right: 1px solid var(--border);
+  }
+
+  .featured-body { padding: 40px; }
+
+  .featured-label {
+    display: inline-block;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.3);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .featured-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-main);
+    letter-spacing: -0.5px;
+    line-height: 1.3;
+    margin-bottom: 14px;
+  }
+
+  .featured-excerpt {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-bottom: 24px;
+  }
+
+  .featured-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: auto;
+  }
+
+  @media (max-width: 768px) {
+    .featured-post { grid-template-columns: 1fr; }
+    .featured-visual { min-height: 180px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
+
+<!-- Navbar -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">$_</div>
+      <span class="logo-text">Linux<span>Rehberleri</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#categories">Kategoriler</a></li>
+      <li><a href="#guides">Rehberler</a></li>
+      <li><a href="#commands">Komutlar</a></li>
+      <li><a href="#distros">Dağıtımlar</a></li>
+      <li><a href="#tips">İpuçları</a></li>
+      <li><a href="#newsletter" class="nav-cta">Abone Ol</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menü">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mobile-menu">
+  <a href="#categories" onclick="toggleMenu()">📂 Kategoriler</a>
+  <a href="#guides" onclick="toggleMenu()">📚 Rehberler</a>
+  <a href="#commands" onclick="toggleMenu()">⌨️ Komutlar</a>
+  <a href="#distros" onclick="toggleMenu()">🐧 Dağıtımlar</a>
+  <a href="#tips" onclick="toggleMenu()">💡 İpuçları</a>
+  <a href="#newsletter" onclick="toggleMenu()">📩 Abone Ol</a>
+</div>
+
+<!-- Hero -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        Türkçe'nin En Kapsamlı Linux Kaynağı
+      </div>
+      <h1 class="hero-title">
+        <span class="line1">Linux'u Öğren,</span>
+        <span class="line2">Sisteme Hükmet.</span>
+      </h1>
+      <p class="hero-sub">
+        Komut satırından sunucu yönetimine, ağ güvenliğinden sistem optimizasyonuna kadar her seviyeye uygun Türkçe rehberler. Gerçek dünya örnekleriyle, adım adım öğren.
+      </p>
+      <div class="hero-btns">
+        <a href="#guides" class="btn-primary">🚀 Rehberlere Başla</a>
+        <a href="#commands" class="btn-outline">⌨️ Komut Referansı</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <span class="hero-stat-val">150+</span>
+          <span class="hero-stat-lbl">Türkçe Rehber</span>
+        </div>
+        <div>
+          <span class="hero-stat-val">12K+</span>
+          <span class="hero-stat-lbl">Aktif Okuyucu</span>
+        </div>
+        <div>
+          <span class="hero-stat-val">500+</span>
+          <span class="hero-stat-lbl">Komut Örneği</span>
+        </div>
+        <div>
+          <span class="hero-stat-val">8</span>
+          <span class="hero-stat-lbl">Dağıtım Rehberi</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <span class="t-dot red"></span>
+          <span class="t-dot yellow"></span>
+          <span class="t-dot green"></span>
+          <span class="terminal-title">user@linux-rehberleri:~</span>
+        </div>
+        <div class="terminal-body">
+<span class="t-comment"># Linux Rehberleri'ne Hoş Geldiniz</span>
+<span class="t-prompt">user@linux:~$</span> <span class="t-cmd">uname -a</span>
+<span class="t-output">Linux server 6.8.0 #1 SMP x86_64 GNU/Linux</span>
+
+<span class="t-prompt">user@linux:~$</span> <span class="t-cmd">cat /etc/os-release</span>
+<span class="t-accent">NAME="Ubuntu 24.04 LTS"</span>
+<span class="t-output">PRETTY_NAME="Ubuntu Noble Numbat"</span>
+<span class="t-output">VERSION="24.04.1 LTS"</span>
+
+<span class="t-prompt">user@linux:~$</span> <span class="t-cmd">uptime -p</span>
+<span class="t-success">up 42 days, 7 hours, 13 minutes</span>
+
+<span class="t-prompt">user@linux:~$</span> <span class="t-cmd">df -h /</span>
+<span class="t-output">Filesystem      Size  Used Avail Use%</span>
+<span class="t-accent">/dev/sda1       500G   87G  413G  18%</span>
+
+<span class="t-prompt">user@linux:~$</span> <span class="t-cmd">sudo apt update && apt upgrade</span>
+<span class="t-warn">Paketler kontrol ediliyor...</span>
+<span class="t-success">✓ 147 paket güncellendi.</span>
+
+<span class="t-prompt">user@linux:~$</span> <span class="t-cursor"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Categories -->
+<section id="categories" class="section">
+  <div class="container">
+    <div class="section-head fade-in">
+      <span class="section-label">// kategoriler</span>
+      <h2 class="section-title">Konuya Göre Keşfet</h2>
+      <p class="section-sub">İlgilendiğin konuyu seç, o alana özel rehberler, komutlar ve pratik örnekleri bul.</p>
+    </div>
+    <div class="cat-grid">
+      <a href="#guides" class="cat-card fade-in stagger-1">
+        <div class="cat-icon" style="background:rgba(0,212,255,0.1)">🖥️</div>
+        <div class="cat-name">Temel Komutlar</div>
+        <div class="cat-desc">ls, cd, mkdir, rm, cp, mv ve daha yüzlerce temel terminal komutu. Yeni başlayanlar için mükemmel başlangıç noktası.</div>
+        <div class="cat-count">32 rehber · 120+ komut</div>
+      </a>
+      <a href="#guides" class="cat-card fade-in stagger-2">
+        <div class="cat-icon" style="background:rgba(16,185,129,0.1)">🔒</div>
+        <div class="cat-name">Güvenlik & Ağ</div>
+        <div class="cat-desc">Firewall yapılandırması, SSH sertleştirme, iptables kuralları ve ağ analiz araçları.</div>
+        <div class="cat-count">28 rehber · nmap, fail2ban, ufw</div>
+      </a>
+      <a href="#guides" class="cat-card fade-in stagger-3">
+        <div class="cat-icon" style="background:rgba(124,58,237,0.1)">🐳</div>
+        <div class="cat-name">Docker & Container</div>
+        <div class="cat-desc">Docker kurulumu, imaj yönetimi, Docker Compose ile multi-container uygulamalar ve Kubernetes temelleri.</div>
+        <div class="cat-count">21 rehber · docker, k8s</div>
+      </a>
+      <a href="#guides" class="cat-card fade-in stagger-4">
+        <div class="cat-icon" style="background:rgba(245,158,11,0.1)">📜</div>
+        <div class="cat-name">Bash Scripting</div>
+        <div class="cat-desc">Otomasyon scriptleri, cron job'lar, değişkenler, döngüler ve fonksiyonlarla güçlü shell scriptleri yaz.</div>
+        <div class="cat-count">19 rehber · 50+ script örneği</div>
+      </a>
+      <a href="#guides" class="cat-card fade-in">
+        <div class="cat-icon" style="background:rgba(239,68,68,0.1)">🖴</div>
+        <div class="cat-name">Disk & Depolama</div>
+        <div class="cat-desc">LVM yönetimi, RAID kurulumu, dosya sistemi araçları, yedekleme stratejileri ve disk optimizasyonu.</div>
+        <div class="cat-count">15 rehber · fdisk, lvm, rsync</div>
+      </a>
+      <a href="#guides" class="cat-card fade-in stagger-1">
+        <div class="cat-icon" style="background:rgba(0,212,255,0.1)">🌐</div>
+        <div class="cat-name">Web Sunucuları</div>
+        <div class="cat-desc">Nginx ve Apache yapılandırması, SSL sertifikası kurulumu, reverse proxy ve yük dengeleme.</div>
+        <div class="cat-count">17 rehber · nginx, apache, certbot</div>
+      </a>
+      <a href="#guides" class="cat-card fade-in stagger-2">
+        <div class="cat-icon" style="background:rgba(16,185,129,0.1)">🗄️</div>
+        <div class="cat-name">Veritabanları</div>
+        <div class="cat-desc">MySQL, PostgreSQL ve Redis'in Linux üzerinde kurulumu, optimizasyonu ve güvenli yapılandırması.</div>
+        <div class="cat-count">14 rehber · mysql, postgres, redis</div>
+      </a>
+      <a href="#guides" class="cat-card fade-in stagger-3">
+        <div class="cat-icon" style="background:rgba(124,58,237,0.1)">⚙️</div>
+        <div class="cat-name">Sistem Yönetimi</div>
+        <div class="cat-desc">Systemd servisleri, process yönetimi, log analizi, kaynak monitöringi ve performans ayarlamaları.</div>
+        <div class="cat-count">24 rehber · systemd, htop, journalctl</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Guides -->
+<section id="guides" class="section" style="background:var(--bg-dark)">
+  <div class="container">
+    <div class="section-head fade-in">
+      <span class="section-label">// rehberler</span>
+      <h2 class="section-title">Öne Çıkan Rehberler</h2>
+      <p class="section-sub">En çok okunan, güncel ve kapsamlı Linux rehberleri.</p>
+    </div>
+
+    <!-- Search -->
+    <div class="search-wrap fade-in">
+      <input type="text" class="search-input" placeholder="Rehber ara... (ör: nginx, bash, docker)" oninput="filterGuides(this.value)">
+      <span class="search-icon">🔍</span>
+    </div>
+
+    <!-- Featured Post -->
+    <div class="featured-post fade-in">
+      <div class="featured-visual">
+        <div class="terminal-window" style="width:100%; max-width:340px">
+          <div class="terminal-header">
+            <span class="t-dot red"></span><span class="t-dot yellow"></span><span class="t-dot green"></span>
+            <span class="terminal-title">nginx-kurulum.sh</span>
+          </div>
+          <div class="terminal-body" style="font-size:11px">
+<span class="t-comment">#!/bin/bash</span>
+<span class="t-comment"># Ubuntu 24.04 - Nginx + SSL Kurulum</span>
+<span></span>
+<span class="t-prompt">$</span> <span class="t-cmd">sudo apt update -y</span>
+<span class="t-prompt">$</span> <span class="t-cmd">sudo apt install nginx -y</span>
+<span class="t-success">✓ Nginx 1.24 kuruldu</span>
+<span></span>
+<span class="t-prompt">$</span> <span class="t-cmd">sudo systemctl enable --now nginx</span>
+<span class="t-prompt">$</span> <span class="t-cmd">sudo ufw allow 'Nginx Full'</span>
+<span class="t-success">✓ Firewall güncellendi</span>
+<span></span>
+<span class="t-prompt">$</span> <span class="t-cmd">sudo certbot --nginx -d example.com</span>
+<span class="t-accent">🔐 SSL sertifikası alınıyor...</span>
+<span class="t-success">✓ HTTPS aktif!</span>
+          </div>
+        </div>
+      </div>
+      <div class="featured-body">
+        <span class="featured-label">⭐ Öne Çıkan Rehber</span>
+        <h2 class="featured-title">Nginx Kurulumu, SSL Yapılandırması ve Reverse Proxy Rehberi</h2>
+        <p class="featured-excerpt">Ubuntu 24.04 üzerinde Nginx'i sıfırdan kurun, Let's Encrypt ile ücretsiz SSL sertifikası alın ve birden fazla alan adı için reverse proxy yapılandırmasını öğrenin. Production-ready bir web sunucusu kurmak için ihtiyacınız olan her şey bu rehberde.</p>
+        <div class="guide-meta" style="margin-bottom:20px">
+          <span class="tag tag-blue">Nginx</span>
+          <span class="tag tag-green">SSL/TLS</span>
+          <span class="tag tag-purple">Reverse Proxy</span>
+          <span class="tag tag-yellow">Orta Seviye</span>
+        </div>
+        <div class="featured-meta">
+          <span>👤 Admin</span>
+          <span>📅 15 Mart 2025</span>
+          <span>⏱️ 18 dk okuma</span>
+          <span>👁️ 4.2K görüntülenme</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Guides Grid -->
+    <div class="guides-grid" id="guides-grid">
+      <!-- Guide 1 -->
+      <article class="guide-card fade-in stagger-1" data-title="bash scripting otomasyon shell script">
+        <div class="guide-thumb" style="background:linear-gradient(135deg,#0d1117,#0a1628)">
+          <div class="guide-thumb-code">#!/bin/bash
+for file in *.log; do
+  gzip -9 "$file"
+  mv "$file.gz" /backup/
+done
+echo "Yedekleme tamam!"</div>
+        </div>
+        <div class="guide-body">
+          <div class="guide-meta">
+            <span class="tag tag-yellow">Bash</span>
+            <span class="tag tag-green">Otomasyon</span>
+            <span class="guide-difficulty">🟡 Orta</span>
+          </div>
+          <h3 class="guide-title">Bash Scripting ile Sistem Otomasyonu: Sıfırdan İleri Seviyeye</h3>
+          <p class="guide-excerpt">Değişkenler, koşullar, döngüler ve fonksiyonlardan başlayarak log rotasyonu, otomatik yedekleme ve cron entegrasyonuna kadar gerçek dünya Bash scriptleri.</p>
+          <div class="guide-footer">
+            <div class="guide-author">
+              <div class="author-avatar">MK</div>
+              <span>Murat Kaya</span>
+            </div>
+            <span class="guide-read-time">⏱️ 25 dk</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Guide 2 -->
+      <article class="guide-card fade-in stagger-2" data-title="ssh güvenlik hardening sunucu">
+        <div class="guide-thumb" style="background:linear-gradient(135deg,#0a1a0a,#0d1117)">
+          <div class="guide-thumb-code" style="color:#10b981">$ ssh-keygen -t ed25519 \
+  -C "admin@server"
+Generating keys...
+✓ Keys saved to ~/.ssh/
+
+$ ssh-copy-id user@server
+✓ Key kopyalandı!</div>
+        </div>
+        <div class="guide-body">
+          <div class="guide-meta">
+            <span class="tag tag-green">SSH</span>
+            <span class="tag tag-red">Güvenlik</span>
+            <span class="guide-difficulty">🟢 Başlangıç</span>
+          </div>
+          <h3 class="guide-title">SSH Güvenliği: Anahtar Tabanlı Kimlik Doğrulama ve Sunucu Sertleştirme</h3>
+          <p class="guide-excerpt">SSH anahtar çifti oluşturma, parola girişini devre dışı bırakma, 2FA kurulumu ve sshd_config ile ileri düzey güvenlik ayarları.</p>
+          <div class="guide-footer">
+            <div class="guide-author">
+              <div class="author-avatar">AY</div>
+              <span>Ayşe Yılmaz</span>
+            </div>
+            <span class="guide-read-time">⏱️ 15 dk</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Guide 3 -->
+      <article class="guide-card fade-in stagger-3" data-title="docker container kurulum image compose">
+        <div class="guide-thumb" style="background:linear-gradient(135deg,#0a0e1a,#0f1030)">
+          <div class="guide-thumb-code" style="color:#a78bfa">services:
+  web:
+    image: nginx:alpine
+    ports: ["80:80"]
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: myapp</div>
+        </div>
+        <div class="guide-body">
+          <div class="guide-meta">
+            <span class="tag tag-purple">Docker</span>
+            <span class="tag tag-blue">Container</span>
+            <span class="guide-difficulty">🟡 Orta</span>
+          </div>
+          <h3 class="guide-title">Docker Compose ile Multi-Container Uygulama Dağıtımı</h3>
+          <p class="guide-excerpt">Docker Compose kullanarak Nginx, PostgreSQL ve uygulama sunucusunu birlikte ayağa kaldırın. Network, volume ve environment yönetimi.</p>
+          <div class="guide-footer">
+            <div class="guide-author">
+              <div class="author-avatar">EA</div>
+              <span>Emre Acar</span>
+            </div>
+            <span class="guide-read-time">⏱️ 20 dk</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Guide 4 -->
+      <article class="guide-card fade-in" data-title="firewall iptables ufw güvenlik">
+        <div class="guide-thumb" style="background:linear-gradient(135deg,#1a0a0a,#0d1117)">
+          <div class="guide-thumb-code" style="color:#f87171">$ sudo ufw enable
+$ sudo ufw default deny incoming
+$ sudo ufw default allow outgoing
+$ sudo ufw allow 22/tcp
+$ sudo ufw allow 80,443/tcp
+$ sudo ufw status verbose
+✓ Firewall aktif!</div>
+        </div>
+        <div class="guide-body">
+          <div class="guide-meta">
+            <span class="tag tag-red">UFW</span>
+            <span class="tag tag-red">Firewall</span>
+            <span class="guide-difficulty">🟢 Başlangıç</span>
+          </div>
+          <h3 class="guide-title">UFW ile Linux Güvenlik Duvarı Yapılandırması</h3>
+          <p class="guide-excerpt">Ubuntu/Debian sistemlerde UFW kurulumu ve yapılandırması. Port yönetimi, kural oluşturma, belirli IP'lere erişim kontrolü ve güvenli kural sıralaması.</p>
+          <div class="guide-footer">
+            <div class="guide-author">
+              <div class="author-avatar">SC</div>
+              <span>Selim Can</span>
+            </div>
+            <span class="guide-read-time">⏱️ 12 dk</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Guide 5 -->
+      <article class="guide-card fade-in stagger-1" data-title="systemd servis daemon yönetimi">
+        <div class="guide-thumb" style="background:linear-gradient(135deg,#0a1515,#0d1117)">
+          <div class="guide-thumb-code" style="color:#00d4ff">[Unit]
+Description=My App
+After=network.target
+
+[Service]
+User=www-data
+ExecStart=/usr/bin/node app.js
+Restart=always
+
+[Install]
+WantedBy=multi-user.target</div>
+        </div>
+        <div class="guide-body">
+          <div class="guide-meta">
+            <span class="tag tag-blue">Systemd</span>
+            <span class="tag tag-green">Servis</span>
+            <span class="guide-difficulty">🟡 Orta</span>
+          </div>
+          <h3 class="guide-title">Systemd ile Özel Servis Oluşturma ve Yönetimi</h3>
+          <p class="guide-excerpt">Kendi uygulamanız için systemd unit dosyası yazın, otomatik başlatma ve yeniden başlatma politikaları belirleyin, servis loglarını analiz edin.</p>
+          <div class="guide-footer">
+            <div class="guide-author">
+              <div class="author-avatar">NK</div>
+              <span>Nisa Korkmaz</span>
+            </div>
+            <span class="guide-read-time">⏱️ 17 dk</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Guide 6 -->
+      <article class="guide-card fade-in stagger-2" data-title="lvm disk yönetimi raid depolama">
+        <div class="guide-thumb" style="background:linear-gradient(135deg,#0d0a1a,#0d1117)">
+          <div class="guide-thumb-code" style="color:#f59e0b">$ pvcreate /dev/sdb
+$ vgcreate vg_data /dev/sdb
+$ lvcreate -L 200G \
+  -n lv_web vg_data
+$ mkfs.ext4 /dev/vg_data/lv_web
+$ mount /dev/vg_data/lv_web /data
+✓ LVM volume hazır!</div>
+        </div>
+        <div class="guide-body">
+          <div class="guide-meta">
+            <span class="tag tag-yellow">LVM</span>
+            <span class="tag tag-purple">Disk</span>
+            <span class="guide-difficulty">🔴 İleri</span>
+          </div>
+          <h3 class="guide-title">LVM ile Esnek Disk Yönetimi: Oluşturma, Genişletme, Snapshot</h3>
+          <p class="guide-excerpt">Physical Volume, Volume Group ve Logical Volume kavramları, LVM üzerinde dinamik disk genişletme, snapshot alma ve mirror disk konfigürasyonu.</p>
+          <div class="guide-footer">
+            <div class="guide-author">
+              <div class="author-avatar">BT</div>
+              <span>Berk Toprak</span>
+            </div>
+            <span class="guide-read-time">⏱️ 22 dk</span>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div style="text-align:center; margin-top:40px;">
+      <a href="#" class="btn-outline">📚 Tüm Rehberleri Gör (150+)</a>
+    </div>
+  </div>
+</section>
+
+<!-- Full Article -->
+<section id="article" class="section">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="#">Ana Sayfa</a>
+      <span>›</span>
+      <a href="#categories">Temel Komutlar</a>
+      <span>›</span>
+      <span>Linux Komut Satırına Giriş</span>
+    </div>
+
+    <div class="article-layout">
+      <article class="article-content">
+        <div class="guide-meta" style="margin-bottom:20px">
+          <span class="tag tag-green">Başlangıç</span>
+          <span class="tag tag-blue">Terminal</span>
+          <span class="tag tag-yellow">Temel</span>
+        </div>
+        <h1 style="font-size:clamp(26px,4vw,42px); font-weight:800; letter-spacing:-1px; margin-bottom:16px; line-height:1.2;">Linux Komut Satırına Giriş: Yeni Başlayanlar İçin Kapsamlı Rehber</h1>
+        <div class="featured-meta" style="margin-bottom:32px">
+          <span>👤 Murat Kaya</span>
+          <span>📅 10 Mart 2025</span>
+          <span>⏱️ 30 dk okuma</span>
+          <span>👁️ 8.9K görüntülenme</span>
+        </div>
+
+        <p>Linux'a yeni başlıyorsanız, komut satırı (terminal) başta korkutucu gelebilir. Ancak birkaç temel komutu öğrendikten sonra, grafik arayüzden çok daha hızlı ve güçlü bir şekilde sisteminizi yönetebileceğinizi göreceksiniz. Bu rehberde, en çok kullanılan Linux komutlarını gerçek örneklerle öğreneceksiniz.</p>
+
+        <h2>1. Terminal Nedir ve Nasıl Açılır?</h2>
+        <p>Terminal (veya konsol), Linux sisteminde komut girmenizi sağlayan metin tabanlı arayüzdür. Grafik masaüstü ortamlarında genellikle <strong>Ctrl+Alt+T</strong> tuş kombinasyonuyla açılır. Sunucularda ise doğrudan SSH ile terminale bağlanırsınız.</p>
+
+        <div class="info-box">
+          <div class="info-box-title">💡 İpucu</div>
+          <p>Terminal açıkken <strong>Tab</strong> tuşuna basarak komut ve dosya adı tamamlama yapabilirsiniz. Bu, yazım hatalarını önler ve çok zaman kazandırır.</p>
+        </div>
+
+        <h2>2. Temel Dosya ve Dizin Komutları</h2>
+        <p>Linux'ta her şey bir dosyadır. Dosya sistemiyle etkileşim kurmak için aşağıdaki komutları kullanırsınız:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <button class="code-copy" onclick="copyCode(this)">Kopyala</button>
+          </div>
+          <div class="code-body">
+<span class="line"><span style="color:#64748b"># Mevcut dizini göster</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">pwd</span></span>
+<span class="line"><span style="color:#64748b">/home/kullanici</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># Dizin içeriğini listele</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">ls -la</span></span>
+<span class="line"><span style="color:#64748b">total 56</span></span>
+<span class="line"><span style="color:#00d4ff">drwxr-xr-x  8 user user 4096 Mar 15 10:30 .</span></span>
+<span class="line"><span style="color:#00d4ff">drwxr-xr-x 45 user user 4096 Mar 14 09:15 ..</span></span>
+<span class="line"><span style="color:#a78bfa">-rw-r--r--  1 user user  220 Mar 01 14:22 .bash_profile</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># Dizin oluştur</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">mkdir -p projeler/web/frontend</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># Dizin değiştir</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">cd projeler/web/</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># Dosya kopyala</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">cp kaynak.txt hedef.txt</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">cp -r klasor/ yedek_klasor/</span>  <span style="color:#64748b"># klasör kopyala</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># Dosya taşı / yeniden adlandır</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">mv eski_ad.txt yeni_ad.txt</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># Dosya sil (DİKKATLİ KULLANIN!)</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">rm dosya.txt</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">rm -rf bos_klasor/</span>         <span style="color:#64748b"># klasör sil</span></span>
+          </div>
+        </div>
+
+        <div class="info-box warning">
+          <div class="info-box-title">⚠️ Dikkat</div>
+          <p><strong>rm -rf</strong> komutu geri alınamaz! Özellikle root olarak çalışırken son derece dikkatli olun. Silmeden önce <strong>ls</strong> ile dosyaları kontrol edin.</p>
+        </div>
+
+        <h2>3. Dosya İçeriği Görüntüleme</h2>
+        <p>Dosya içeriklerini terminal üzerinden okumak için birkaç farklı yöntem vardır:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <button class="code-copy" onclick="copyCode(this)">Kopyala</button>
+          </div>
+          <div class="code-body">
+<span class="line"><span style="color:#64748b"># Dosyanın tamamını göster</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">cat /etc/hosts</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># Sayfa sayfa göster (q ile çık)</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">less /var/log/syslog</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># Son 20 satırı göster ve canlı takip et</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">tail -f -n 20 /var/log/nginx/access.log</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># İlk 10 satır</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">head -n 10 access.log</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># İçinde kelime ara</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">grep -n "ERROR" /var/log/app.log</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">grep -ri "hata" /var/log/</span>   <span style="color:#64748b"># büyük/küçük harf duyarsız, recursive</span></span>
+          </div>
+        </div>
+
+        <h2>4. Süreç (Process) Yönetimi</h2>
+        <p>Çalışan süreçleri izlemek ve yönetmek Linux sistem yönetiminin temel becerilerinden biridir:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <button class="code-copy" onclick="copyCode(this)">Kopyala</button>
+          </div>
+          <div class="code-body">
+<span class="line"><span style="color:#64748b"># Tüm süreçleri listele</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">ps aux</span></span>
+<span class="line"><span style="color:#00d4ff">USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND</span></span>
+<span class="line"><span style="color:#64748b">root         1  0.0  0.1 225788  9120 ?        Ss   Mar14   0:10 /sbin/init</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># Gerçek zamanlı süreç izle</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">htop</span>                        <span style="color:#64748b"># kurulu değilse: apt install htop</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># Belirli süreci bul</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">pgrep -fl nginx</span></span>
+<span class="line"><span style="color:#64748b">1234 nginx: master process</span></span>
+<span class="line"><span style="color:#64748b">1235 nginx: worker process</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># Süreci sonlandır</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">kill -9 1234</span>                 <span style="color:#64748b"># PID ile</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">pkill nginx</span>                  <span style="color:#64748b"># isim ile</span></span>
+          </div>
+        </div>
+
+        <h2>5. Paket Yönetimi (APT)</h2>
+        <p>Ubuntu ve Debian tabanlı dağıtımlarda yazılım kurulumu APT paket yöneticisi ile yapılır:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <button class="code-copy" onclick="copyCode(this)">Kopyala</button>
+          </div>
+          <div class="code-body">
+<span class="line"><span style="color:#64748b"># Paket listesini güncelle</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">sudo apt update</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># Kurulu paketleri yükselt</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">sudo apt upgrade -y</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># Yazılım kur</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">sudo apt install vim curl wget git -y</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># Yazılım kaldır</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">sudo apt remove --purge paket_adi</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># Paket ara</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">apt search text-editor</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># Artık gerekli olmayan paketleri temizle</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">sudo apt autoremove -y && sudo apt autoclean</span></span>
+          </div>
+        </div>
+
+        <div class="info-box success">
+          <div class="info-box-title">✅ İyi Uygulama</div>
+          <p>Sunucularınızı düzenli olarak güncelleyin. Güvenlik yamaları için <strong>unattended-upgrades</strong> paketini kurarak otomatik güvenlik güncellemelerini etkinleştirebilirsiniz.</p>
+        </div>
+
+        <h3>Diğer Dağıtımlarda Paket Yönetimi</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <button class="code-copy" onclick="copyCode(this)">Kopyala</button>
+          </div>
+          <div class="code-body">
+<span class="line"><span style="color:#64748b"># RHEL / CentOS / Fedora (DNF)</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">sudo dnf install nginx</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">sudo dnf update -y</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># Arch Linux (Pacman)</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">sudo pacman -Syu</span>              <span style="color:#64748b"># güncelle</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">sudo pacman -S nginx</span>          <span style="color:#64748b"># kur</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># openSUSE (Zypper)</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">sudo zypper install nginx</span></span>
+          </div>
+        </div>
+
+        <h2>6. Ağ Komutları</h2>
+        <p>Ağ bağlantısını kontrol etmek ve sorun gidermek için yaygın kullanılan komutlar:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <button class="code-copy" onclick="copyCode(this)">Kopyala</button>
+          </div>
+          <div class="code-body">
+<span class="line"><span style="color:#64748b"># IP adreslerini göster</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">ip addr show</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">hostname -I</span>                  <span style="color:#64748b"># kısa yol</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># Bağlantı testi</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">ping -c 4 google.com</span></span>
+<span class="line"><span style="color:#00d4ff">PING google.com: 56 data bytes</span></span>
+<span class="line"><span style="color:#a78bfa">64 bytes from 142.250.185.46: icmp_seq=1 ttl=116 time=12.4 ms</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># Açık portları listele</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">ss -tlnp</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">netstat -tlnp</span>               <span style="color:#64748b"># eski yöntem</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># DNS sorgula</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">dig google.com</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">nslookup google.com</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># HTTP isteği gönder</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">curl -I https://example.com</span>  <span style="color:#64748b"># header bilgisi</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">wget -q -O - https://api.github.com | head</span></span>
+          </div>
+        </div>
+
+        <h2>7. İzinler ve Sahiplik</h2>
+        <p>Linux'ta her dosyanın bir sahibi ve izin seti vardır. Doğru izinleri ayarlamak güvenlik açısından kritik öneme sahiptir:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <button class="code-copy" onclick="copyCode(this)">Kopyala</button>
+          </div>
+          <div class="code-body">
+<span class="line"><span style="color:#64748b"># İzin değiştir</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">chmod 755 script.sh</span>         <span style="color:#64748b"># rwxr-xr-x</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">chmod +x script.sh</span>          <span style="color:#64748b"># çalıştırılabilir yap</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">chmod -R 644 /var/www/html/</span> <span style="color:#64748b"># recursive</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># Sahip değiştir</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">sudo chown www-data:www-data /var/www/html/</span></span>
+<span class="line"><span style="color:#10b981">$</span> <span style="color:#e2e8f0">sudo chown -R user:group /home/user/</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#64748b"># İzinleri oku</span></span>
+<span class="line"><span style="color:#64748b"># -rw-r--r-- = 644 = owner:rw group:r others:r</span></span>
+<span class="line"><span style="color:#64748b"># drwxr-xr-x = 755 = owner:rwx group:rx others:rx</span></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-widget">
+          <div class="widget-title">📋 İçindekiler</div>
+          <ul class="toc-list">
+            <li><a href="#article">Terminal Nedir?</a></li>
+            <li><a href="#article">Dosya ve Dizin Komutları</a></li>
+            <li><a href="#article">Dosya İçeriği Görüntüleme</a></li>
+            <li><a href="#article">Süreç Yönetimi</a></li>
+            <li><a href="#article">Paket Yönetimi (APT)</a></li>
+            <li><a href="#article">Ağ Komutları</a></li>
+            <li><a href="#article">İzinler ve Sahiplik</a></li>
+          </ul>
+        </div>
+        <div class="sidebar-widget">
+          <div class="widget-title">🕐 Son Rehberler</div>
+          <ul class="recent-list">
+            <li class="recent-item">
+              <div class="recent-icon">🐳</div>
+              <div class="recent-info">
+                <a href="#" class="recent-title">Docker ile CI/CD Pipeline Kurulumu</a>
+                <span class="recent-date">12 Mart 2025</span>
+              </div>
+            </li>
+            <li class="recent-item">
+              <div class="recent-icon">🔐</div>
+              <div class="recent-info">
+                <a href="#" class="recent-title">WireGuard VPN Sunucusu Kurulumu</a>
+                <span class="recent-date">10 Mart 2025</span>
+              </div>
+            </li>
+            <li class="recent-item">
+              <div class="recent-icon">📊</div>
+              <div class="recent-info">
+                <a href="#" class="recent-title">Prometheus + Grafana ile Monitoring</a>
+                <span class="recent-date">8 Mart 2025</span>
+              </div>
+            </li>
+            <li class="recent-item">
+              <div class="recent-icon">⚡</div>
+              <div class="recent-info">
+                <a href="#" class="recent-title">Linux Kernel Parametreleri Optimizasyonu</a>
+                <span class="recent-date">5 Mart 2025</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="sidebar-widget">
+          <div class="widget-title">🏷️ Etiketler</div>
+          <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:4px;">
+            <span class="tag tag-blue">Linux</span>
+            <span class="tag tag-green">Ubuntu</span>
+            <span class="tag tag-purple">Docker</span>
+            <span class="tag tag-yellow">Bash</span>
+            <span class="tag tag-red">Güvenlik</span>
+            <span class="tag tag-blue">Nginx</span>
+            <span class="tag tag-green">SSH</span>
+            <span class="tag tag-purple">Systemd</span>
+            <span class="tag tag-yellow">LVM</span>
+            <span class="tag tag-red">Firewall</span>
+            <span class="tag tag-blue">DNS</span>
+            <span class="tag tag-green">Cron</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- Commands Table -->
+<section id="commands" class="section">
+  <div class="container">
+    <div class="section-head fade-in">
+      <span class="section-label">// referans</span>
+      <h2 class="section-title">Hızlı Komut Referansı</h2>
+      <p class="section-sub">Günlük kullanımda en çok ihtiyaç duyulan Linux komutları, açıklamaları ve örnekleriyle.</p>
+    </div>
+
+    <!-- Tabs -->
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px; justify-content:center;">
+      <button class="tab-btn active" onclick="showTab('dosya')">📁 Dosya</button>
+      <button class="tab-btn" onclick="showTab('sistem')">⚙️ Sistem</button>
+      <button class="tab-btn" onclick="showTab('ag')">🌐 Ağ</button>
+      <button class="tab-btn" onclick="showTab('metin')">📝 Metin</button>
+    </div>
+
+    <style>
+      .tab-btn {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 10px 20px;
+        color: var(--text-muted);
+        font-family: var(--font-head);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .tab-btn.active, .tab-btn:hover {
+        background: rgba(0,212,255,0.1);
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .tab-content { display: none; }
+      .tab-content.active { display: block; }
+    </style>
+
+    <!-- Dosya Tab -->
+    <div class="tab-content active" id="tab-dosya">
+      <div class="cmd-table-wrap fade-in">
+        <table>
+          <thead>
+            <tr>
+              <th>Komut</th>
+              <th>Açıklama</th>
+              <th>Örnek Kullanım</th>
+              <th>Not</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>ls</td><td><strong>Dizin içeriğini listeler</strong></td><td>ls -la /var/www</td><td>-a: gizli dosyalar, -l: detaylı</td></tr>
+            <tr><td>cd</td><td><strong>Dizin değiştirir</strong></td><td>cd /etc/nginx</td><td>cd ~ ile ev dizinine döner</td></tr>
+            <tr><td>pwd</td><td><strong>Mevcut dizini gösterir</strong></td><td>pwd</td><td>Print Working Directory</td></tr>
+            <tr><td>mkdir</td><td><strong>Yeni dizin oluşturur</strong></td><td>mkdir -p a/b/c</td><td>-p: ara dizinleri de oluşturur</td></tr>
+            <tr><td>rm</td><td><strong>Dosya/dizin siler</strong></td><td>rm -rf /tmp/test/</td><td>DİKKAT: geri alınamaz!</td></tr>
+            <tr><td>cp</td><td><strong>Kopyalar</strong></td><td>cp -rp src/ dst/</td><td>-p: izinleri ve zamanı korur</td></tr>
+            <tr><td>mv</td><td><strong>Taşır / yeniden adlandırır</strong></td><td>mv old.conf new.conf</td><td>Aynı bölümde taşıma anlıktır</td></tr>
+            <tr><td>find</td><td><strong>Dosya arar</strong></td><td>find / -name "*.log" -mtime -7</td><td>Son 7 günde değişen .log dosyaları</td></tr>
+            <tr><td>ln</td><td><strong>Sembolik/sabit bağ oluşturur</strong></td><td>ln -s /etc/nginx nginx_link</td><td>-s: symlink</td></tr>
+            <tr><td>chmod</td><td><strong>İzin değiştirir</strong></td><td>chmod 755 script.sh</td><td>+x çalıştırılabilir yapar</td></tr>
+            <tr><td>chown</td><td><strong>Sahip değiştirir</strong></td><td>chown www-data:www-data /var/www</td><td>-R: recursive</td></tr>
+            <tr><td>du</td><td><strong>Disk kullanımı</strong></td><td>du -sh /var/log/*</td><td>-s: toplam, -h: okunabilir</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sistem Tab -->
+    <div class="tab-content" id="tab-sistem">
+      <div class="cmd-table-wrap fade-in">
+        <table>
+          <thead>
+            <tr><th>Komut</th><th>Açıklama</th><th>Örnek Kullanım</th><th>Not</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>ps aux</td><td><strong>Süreçleri listeler</strong></td><td>ps aux | grep nginx</td><td>PID, CPU, RAM kullanımı</td></tr>
+            <tr><td>top / htop</td><td><strong>Canlı sistem monitörü</strong></td><td>htop</td><td>htop daha kullanıcı dostu</td></tr>
+            <tr><td>kill</td><td><strong>Sürece sinyal gönderir</strong></td><td>kill -9 1234</td><td>-9 SIGKILL, -15 SIGTERM</td></tr>
+            <tr><td>systemctl</td><td><strong>Systemd servis yönetimi</strong></td><td>systemctl restart nginx</td><td>start/stop/status/enable</td></tr>
+            <tr><td>journalctl</td><td><strong>Systemd log görüntüleyici</strong></td><td>journalctl -u nginx -f</td><td>-f: canlı takip</td></tr>
+            <tr><td>crontab</td><td><strong>Zamanlanmış görevler</strong></td><td>crontab -e</td><td>-l: listele, -r: sil</td></tr>
+            <tr><td>df</td><td><strong>Disk alanı</strong></td><td>df -h</td><td>Tüm bölümlerin doluluk oranı</td></tr>
+            <tr><td>free</td><td><strong>RAM kullanımı</strong></td><td>free -m</td><td>-m: MB, -g: GB</td></tr>
+            <tr><td>uname</td><td><strong>Sistem bilgisi</strong></td><td>uname -a</td><td>Kernel versiyon ve mimari</td></tr>
+            <tr><td>uptime</td><td><strong>Çalışma süresi</strong></td><td>uptime -p</td><td>CPU yük ortalamasını da gösterir</td></tr>
+            <tr><td>dmesg</td><td><strong>Kernel mesajları</strong></td><td>dmesg | tail -50</td><td>Donanım sorunları için</td></tr>
+            <tr><td>lsof</td><td><strong>Açık dosyaları listeler</strong></td><td>lsof -i :80</td><td>80 portunu hangi uygulama kullanıyor</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Ağ Tab -->
+    <div class="tab-content" id="tab-ag">
+      <div class="cmd-table-wrap fade-in">
+        <table>
+          <thead>
+            <tr><th>Komut</th><th>Açıklama</th><th>Örnek Kullanım</th><th>Not</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>ip</td><td><strong>Ağ arayüzleri / rotalar</strong></td><td>ip addr show eth0</td><td>ifconfig'in modern yerine</td></tr>
+            <tr><td>ping</td><td><strong>Bağlantı testi</strong></td><td>ping -c 4 8.8.8.8</td><td>-c: paket sayısı</td></tr>
+            <tr><td>ss</td><td><strong>Socket istatistikleri</strong></td><td>ss -tlnp</td><td>-t: TCP, -l: dinleyen</td></tr>
+            <tr><td>curl</td><td><strong>HTTP/HTTPS istekleri</strong></td><td>curl -v -X POST https://api.example.com</td><td>-s: sessiz, -o: dosyaya yaz</td></tr>
+            <tr><td>wget</td><td><strong>Dosya indir</strong></td><td>wget -c https://example.com/file.tar.gz</td><td>-c: devam ettir</td></tr>
+            <tr><td>nmap</td><td><strong>Port tarayıcı</strong></td><td>nmap -sV -p 1-1000 192.168.1.0/24</td><td>Sadece izinli sistemlerde!</td></tr>
+            <tr><td>dig</td><td><strong>DNS sorgulama</strong></td><td>dig MX google.com @8.8.8.8</td><td>DNS sorun giderme için ideal</td></tr>
+            <tr><td>traceroute</td><td><strong>Ağ rotası izleme</strong></td><td>traceroute google.com</td><td>Gecikme noktası tespiti</td></tr>
+            <tr><td>iptables</td><td><strong>Kernel güvenlik duvarı</strong></td><td>iptables -L -n -v</td><td>Gelişmiş, UFW daha kolay</td></tr>
+            <tr><td>tcpdump</td><td><strong>Ağ paketi yakalama</strong></td><td>tcpdump -i eth0 port 80</td><td>Wireshark'ın terminal sürümü</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Metin Tab -->
+    <div class="tab-content" id="tab-metin">
+      <div class="cmd-table-wrap fade-in">
+        <table>
+          <thead>
+            <tr><th>Komut</th><th>Açıklama</th><th>Örnek Kullanım</th><th>Not</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>grep</td><td><strong>Metin arama</strong></td><td>grep -rn "TODO" /var/www/</td><td>-i: büyük/küçük yok say, -v: tersi</td></tr>
+            <tr><td>sed</td><td><strong>Stream editörü</strong></td><td>sed -i 's/old/new/g' dosya.txt</td><td>-i: dosyayı yerinde değiştir</td></tr>
+            <tr><td>awk</td><td><strong>Metin işleme dili</strong></td><td>awk '{print $1, $3}' dosya.txt</td><td>Sütun bazlı işlemler için güçlü</td></tr>
+            <tr><td>sort</td><td><strong>Sıralar</strong></td><td>sort -rn -k2 dosya.txt</td><td>-r: ters, -n: sayısal, -k: sütun</td></tr>
+            <tr><td>uniq</td><td><strong>Tekrarları kaldırır</strong></td><td>sort log.txt | uniq -c</td><td>Önce sort gereklidir</td></tr>
+            <tr><td>wc</td><td><strong>Satır/kelime/byte sayar</strong></td><td>wc -l /var/log/auth.log</td><td>-l: satır, -w: kelime</td></tr>
+            <tr><td>cut</td><td><strong>Alan keser</strong></td><td>cut -d: -f1 /etc/passwd</td><td>-d: ayırıcı, -f: alan</td></tr>
+            <tr><td>tr</td><td><strong>Karakter dönüştürür</strong></td><td>echo "hello" | tr a-z A-Z</td><td>Küçük → büyük harf</td></tr>
+            <tr><td>tee</td><td><strong>Çıktıyı ikiye böler</strong></td><td>command | tee output.txt</td><td>Hem ekranda gösterir hem yazar</td></tr>
+            <tr><td>xargs</td><td><strong>Argüman aktarır</strong></td><td>find . -name "*.tmp" | xargs rm</td><td>Pipe çıktısını komuta argüman yap</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Distros -->
+<section id="distros" class="section" style="background:var(--bg-card)">
+  <div class="container">
+    <div class="section-head fade-in">
+      <span class="section-label">// dağıtımlar</span>
+      <h2 class="section-title">Hangi Linux Dağıtımı Sana Göre?</h2>
+      <p class="section-sub">Her kullanım senaryosu için doğru Linux dağıtımı. Özelliklerine ve kullanım amacına göre karşılaştırma.</p>
+    </div>
+    <div class="distro-grid">
+      <a href="#guides" class="distro-card fade-in">
+        <div class="distro-logo" style="background:rgba(233,84,32,0.15); font-size:32px">🐧</div>
+        <div class="distro-name">Ubuntu</div>
+        <div class="distro-use">Başlangıç & Genel Amaç</div>
+        <div class="distro-rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      </a>
+      <a href="#guides" class="distro-card fade-in stagger-1">
+        <div class="distro-logo" style="background:rgba(0,124,198,0.15); font-size:32px">🌊</div>
+        <div class="distro-name">Debian</div>
+        <div class="distro-use">Sunucu & Kararlılık</div>
+        <div class="distro-rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      </a>
+      <a href="#guides" class="distro-card fade-in stagger-2">
+        <div class="distro-logo" style="background:rgba(0,168,107,0.15); font-size:32px">🎩</div>
+        <div class="distro-name">Fedora</div>
+        <div class="distro-use">Geliştiriciler</div>
+        <div class="distro-rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span style="color:#2d3748">★</span></div>
+      </a>
+      <a href="#guides" class="distro-card fade-in stagger-3">
+        <div class="distro-logo" style="background:rgba(0,133,198,0.15); font-size:32px">🏛️</div>
+        <div class="distro-name">Arch Linux</div>
+        <div class="distro-use">İleri Seviye Kullanıcılar</div>
+        <div class="distro-rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span style="color:#2d3748">★</span></div>
+      </a>
+      <a href="#guides" class="distro-card fade-in">
+        <div class="distro-logo" style="background:rgba(202,16,16,0.15); font-size:32px">🔴</div>
+        <div class="distro-name">RHEL / Rocky</div>
+        <div class="distro-use">Kurumsal Sunucular</div>
+        <div class="distro-rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      </a>
+      <a href="#guides" class="distro-card fade-in stagger-1">
+        <div class="distro-logo" style="background:rgba(255,196,0,0.1); font-size:32px">🦎</div>
+        <div class="distro-name">openSUSE</div>
+        <div class="distro-use">Masaüstü & Kurumsal</div>
+        <div class="distro-rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span style="color:#2d3748">★</span></div>
+      </a>
+      <a href="#guides" class="distro-card fade-in stagger-2">
+        <div class="distro-logo" style="background:rgba(7,190,186,0.15); font-size:32px">🐉</div>
+        <div class="distro-name">Kali Linux</div>
+        <div class="distro-use">Siber Güvenlik</div>
+        <div class="distro-rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span style="color:#2d3748">★</span></div>
+      </a>
+      <a href="#guides" class="distro-card fade-in stagger-3">
+        <div class="distro-logo" style="background:rgba(255,113,0,0.1); font-size:32px">🔥</div>
+        <div class="distro-name">AlmaLinux</div>
+        <div class="distro-use">CentOS Alternatifi</div>
+        <div class="distro-rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Tips -->
+<section id="tips" class="section">
+  <div class="container">
+    <div class="section-head fade-in">
+      <span class="section-label">// ipuçları</span>
+      <h2 class="section-title">Bilmene Sevindirecek İpuçları</h2>
+      <p class="section-sub">Her gün zaman kazandıracak, verimliliğini artıracak pratik Linux hileleri.</p>
+    </div>
+    <div class="tips-grid">
+      <div class="tip-card fade-in" data-num="01">
+        <div class="tip-icon">⚡</div>
+        <div class="tip-title">Ctrl+R ile Komut Geçmişinde Arama</div>
+        <div class="tip-text">Terminalde Ctrl+R tuşuna basarak yazdıklarınızı komut geçmişinde geriye doğru arayabilirsiniz. Uzun komutları tekrar yazmaktan kurtulun.</div>
+        <div class="tip-cmd">Ctrl+R → "nginx" yazın → Enter</div>
+      </div>
+      <div class="tip-card fade-in stagger-1" data-num="02">
+        <div class="tip-icon">🔁</div>
+        <div class="tip-title">!! ile Son Komutu Tekrarla</div>
+        <div class="tip-text">Önceki komutu sudo ile çalıştırmak mı gerekti? "sudo !!" yazmanız yeterli. "!" işareti son komutu temsil eder.</div>
+        <div class="tip-cmd">sudo !!</div>
+      </div>
+      <div class="tip-card fade-in stagger-2" data-num="03">
+        <div class="tip-icon">🖥️</div>
+        <div class="tip-title">Tmux ile Oturum Yönetimi</div>
+        <div class="tip-text">SSH bağlantınız koptuğunda çalışan komutlarınız durmasın. Tmux ile oturumları saklar, sonra istediğiniz zaman geri dönersiniz.</div>
+        <div class="tip-cmd">tmux new -s mysession</div>
+      </div>
+      <div class="tip-card fade-in stagger-3" data-num="04">
+        <div class="tip-icon">🔍</div>
+        <div class="tip-title">xargs ile Toplu İşlem</div>
+        <div class="tip-text">find ile bulduğunuz dosyaları xargs ile toplu silme, taşıma veya işleme uygulayın. Her dosya için ayrı komut yazmaktan kurtulun.</div>
+        <div class="tip-cmd">find . -name "*.tmp" | xargs rm -f</div>
+      </div>
+      <div class="tip-card fade-in" data-num="05">
+        <div class="tip-icon">📋</div>
+        <div class="tip-title">alias ile Kısayol Oluştur</div>
+        <div class="tip-text">Sık kullandığınız uzun komutları kısa takma adlarla kaydedip anında kullanın. ~/.bashrc dosyasına ekleyerek kalıcı hale getirin.</div>
+        <div class="tip-cmd">alias ll='ls -la --color=auto'</div>
+      </div>
+      <div class="tip-card fade-in stagger-1" data-num="06">
+        <div class="tip-icon">📦</div>
+        <div class="tip-title">rsync ile Akıllı Yedekleme</div>
+        <div class="tip-text">cp yerine rsync kullanın; sadece değişen dosyaları kopyalar, bant genişliğini verimli kullanır ve SSH üzerinden uzak yedekleme yapar.</div>
+        <div class="tip-cmd">rsync -avzP src/ user@server:/backup/</div>
+      </div>
+      <div class="tip-card fade-in stagger-2" data-num="07">
+        <div class="tip-icon">🧹</div>
+        <div class="tip-title">Journalctl ile Log Yönetimi</div>
+        <div class="tip-text">Sistem loglarını zamanla, servise göre ve önceliğe göre filtreleyin. Eski logları silerek disk alanı kazanın.</div>
+        <div class="tip-cmd">journalctl --vacuum-time=30d</div>
+      </div>
+      <div class="tip-card fade-in stagger-3" data-num="08">
+        <div class="tip-icon">🔐</div>
+        <div class="tip-title">SSH Config ile Hızlı Bağlanma</div>
+        <div class="tip-text">~/.ssh/config dosyasına sunucu bilgilerini ekleyerek uzun ssh komutları yerine kısa takma adlarla bağlanın.</div>
+        <div class="tip-cmd">ssh webserver  # ssh admin@192.168.1.10 -p 2222 yerine</div>
+      </div>
+      <div class="tip-card fade-in" data-num="09">
+        <div class="tip-icon">📊</div>
+        <div class="tip-title">watch ile Komut Çıktısını İzle</div>
+        <div class="tip-text">Bir komutun çıktısını belirli aralıklarla tekrarlayın. Disk doluluk oranını, ağ bağlantılarını veya log çıktısını canlı izlemek için mükemmel.</div>
+        <div class="tip-cmd">watch -n 2 "df -h && free -m"</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section id="newsletter" class="section">
+  <div class="container">
+    <div class="newsletter-inner fade-in">
+      <span class="newsletter-icon">📨</span>
+      <div class="section-label">// bülten</div>
+      <h2 class="section-title" style="font-size:36px">Yeni Rehberlerden Haberdar Ol</h2>
+      <p class="section-sub" style="color:var(--text-dim)">Haftada bir, en yeni Linux rehberlerini, ipuçlarını ve güvenlik haberlerini direkt gelen kutuna al. Spam yok, söz.</p>
+      <div class="newsletter-form">
+        <input type="email" class="newsletter-input" placeholder="eposta@adresin.com">
+        <button class="newsletter-btn" onclick="subscribe()">🚀 Abone Ol</button>
+      </div>
+      <p style="font-size:12px; color:var(--text-muted); margin-top:16px;">🔒 Bilgileriniz güvende. İstediğiniz zaman abonelikten çıkabilirsiniz.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="logo" style="margin-bottom:0">
+        <div class="logo-icon">$_</div>
+        <span class="logo-text">Linux<span>Rehberleri</span></span>
+      </a>
+      <p>Türkçe konuşan Linux kullanıcıları ve sistem yöneticileri için hazırlanmış, ücretsiz, kapsamlı Linux eğitim kaynağı.</p>
+      <div class="social-links" style="margin-top:20px">
+        <a href="#" class="social-link" title="GitHub">⌨️</a>
+        <a href="#" class="social-link" title="Twitter/X">𝕏</a>
+        <a href="#" class="social-link" title="YouTube">▶️</a>
+        <a href="#" class="social-link" title="Telegram">✈️</a>
+        <a href="#" class="social-link" title="Discord">💬</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Rehberler</div>
+      <ul class="footer-links">
+        <li><a href="#categories">Temel Komutlar</a></li>
+        <li><a href="#categories">Bash Scripting</a></li>
+        <li><a href="#categories">Sunucu Yönetimi</a></li>
+        <li><a href="#categories">Docker & Container</a></li>
+        <li><a href="#categories">Güvenlik & Ağ</a></li>
+        <li><a href="#categories">Web Sunucuları</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Araçlar</div>
+      <ul class="footer-links">
+        <li><a href="#commands">Komut Referansı</a></li>
+        <li><a href="#distros">Dağıtım Karşılaştırma</a></li>
+        <li><a href="#tips">İpuçları ve Püf Noktaları</a></li>
+        <li><a href="#">Cron İfade Oluşturucu</a></li>
+        <li><a href="#">chmod Hesaplayıcı</a></li>
+        <li><a href="#">Regex Test Aracı</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Site</div>
+      <ul class="footer-links">
+        <li><a href="#">Hakkında</a></li>
+        <li><a href="#">İletişim</a></li>
+        <li><a href="#">Katkıda Bulun</a></li>
+        <li><a href="#">Gizlilik Politikası</a></li>
+        <li><a href="#">Kullanım Koşulları</a></li>
+        <li><a href="#">Bülten Arşivi</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 <span>LinuxRehberleri.net</span> — Tüm rehberler <span>Creative Commons BY-NC-SA 4.0</span> ile lisanslanmıştır.</p>
+    <p>🐧 Linux ile <span>özgürce</span> inşa edildi</p>
+  </div>
+</footer>
+
+<!-- Back to Top -->
+<button id="back-top" onclick="scrollToTop()" title="Başa Dön">↑</button>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const scrollTop = document.documentElement.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / scrollHeight) * 100;
+    document.getElementById('progress-bar').style.width = progress + '%';
+    const btn = document.getElementById('back-top');
+    btn.style.display = scrollTop > 400 ? 'flex' : 'none';
+  });
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Mobile menu
+  function toggleMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+  }
+
+  // Fade in on scroll
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+  // Tabs
+  function showTab(id) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  // Copy code
+  function copyCode(btn) {
+    const block = btn.closest('.code-block').querySelector('.code-body');
+    const text = block.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✓ Kopyalandı!';
+      setTimeout(() => btn.textContent = 'Kopyala', 2000);
+    });
+  }
+
+  // Search guides
+  function filterGuides(query) {
+    const q = query.toLowerCase();
+    document.querySelectorAll('#guides-grid .guide-card').forEach(card => {
+      const title = card.dataset.title || '';
+      const text = card.innerText.toLowerCase();
+      card.style.display = (title.includes(q) || text.includes(q)) ? 'flex' : 'none';
+    });
+  }
+
+  // Newsletter
+  function subscribe() {
+    const input = document.querySelector('.newsletter-input');
+    const btn = document.querySelector('.newsletter-btn');
+    if (input.value && input.value.includes('@')) {
+      btn.textContent = '✓ Abone oldunuz!';
+      btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+      input.value = '';
+      setTimeout(() => {
+        btn.textContent = '🚀 Abone Ol';
+        btn.style.background = '';
+      }, 4000);
+    } else {
+      input.style.borderColor = '#f87171';
+      setTimeout(() => input.style.borderColor = '', 2000);
+    }
+  }
+</script>
+</body>
+</html>
